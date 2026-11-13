@@ -1,18 +1,18 @@
 <?php
 return [
-    'db_host' => '127.0.0.1',
+    'db_host' => 'srv1836.hstgr.io',
     'db_port' => '3306',
-    'db_name' => 'evaranest',
-    'db_user' => 'root',
-    'db_pass' => '',
+    'db_name' => 'u290025640_uniform',
+    'db_user' => 'u290025640_OnlinUniform',
+    'db_pass' => 'admin7091',
     'db_charset' => 'utf8mb4',
-    'api_base_url' => 'http://localhost/juneberry/api',
-    'cors_origins' => 'http://localhost:5173,http://127.0.0.1:5173,http://localhost,http://127.0.0.1',
+    'api_base_url' => 'https://deorajcontracting.com/api',
+    'cors_origins' => 'https://deorajcontracting.com/api',
     // Admin token lifetime in seconds (7 days)
     'token_ttl' => 604800,
 
     // Storefront public URL (used for email invoice & tracking links)
-    'storefront_url' => 'http://localhost:5173',
+    'storefront_url' => 'https://deorajcontracting.com/api',
 
     // ==========================================
     // Email / Gmail SMTP Settings

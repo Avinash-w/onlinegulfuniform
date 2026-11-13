@@ -1,26 +1,33 @@
+
 <?php
 
 function app_config(): array
 {
-    static $config;
+    static $config = null;
+
     if ($config === null) {
         $path = __DIR__ . '/env.php';
+
         if (!is_file($path)) {
             $path = __DIR__ . '/env.example.php';
         }
+
         $config = require $path;
     }
+
     return $config;
 }
 
 function db(): PDO
 {
-    static $pdo;
+    static $pdo = null;
+
     if ($pdo instanceof PDO) {
         return $pdo;
     }
 
     $c = app_config();
+
     $dsn = sprintf(
         'mysql:host=%s;port=%s;dbname=%s;charset=%s',
         $c['db_host'],
@@ -29,12 +36,17 @@ function db(): PDO
         $c['db_charset']
     );
 
-    $pdo = new PDO($dsn, $c['db_user'], $c['db_pass'], [
-        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-        PDO::ATTR_EMULATE_PREPARES => false,
-        PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => true,
-    ]);
+    $pdo = new PDO(
+        $dsn,
+        $c['db_user'],
+        $c['db_pass'],
+        [
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+            PDO::ATTR_EMULATE_PREPARES => false,
+            PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => true,
+        ]
+    );
 
     return $pdo;
 }
@@ -42,10 +54,10 @@ function db(): PDO
 function ensure_soft_delete_columns(PDO $pdo): void
 {
     static $ensured = false;
+
     if ($ensured) {
         return;
     }
-    $ensured = true;
 
     $tables = [
         'categories',
@@ -60,16 +72,29 @@ function ensure_soft_delete_columns(PDO $pdo): void
 
     foreach ($tables as $table) {
         try {
-            $check = $pdo->prepare("SHOW COLUMNS FROM `{$table}` LIKE 'deleted_at'");
+            $check = $pdo->prepare(
+                "SHOW COLUMNS FROM `$table` LIKE 'deleted_at'"
+            );
+
             $check->execute();
+
             if (!$check->fetch()) {
-                $pdo->exec("ALTER TABLE `{$table}` ADD COLUMN `deleted_at` DATETIME NULL");
+                $pdo->exec(
+                    "ALTER TABLE `$table` ADD COLUMN `deleted_at` DATETIME NULL"
+                );
+
                 try {
-                    $pdo->exec("CREATE INDEX `idx_{$table}_deleted` ON `{$table}` (`deleted_at`)");
-                } catch (Throwable $e) {}
+                    $pdo->exec(
+                        "CREATE INDEX `idx_{$table}_deleted` ON `$table` (`deleted_at`)"
+                    );
+                } catch (Throwable $e) {
+                    // Index may already exist
+                }
             }
         } catch (Throwable $e) {
-            // Table might not exist yet before installation, ignore silently
+            // Ignore missing tables
         }
     }
+
+    $ensured = true;
 }
