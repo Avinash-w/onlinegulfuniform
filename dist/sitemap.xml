@@ -1,0 +1,915 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+  <!-- Homepage -->
+  <url>
+    <loc>https://evaranest.braintechtools.xyz/</loc>
+    <lastmod>2026-09-30</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+  </url>
+
+  <!-- Collections & Category Pages -->
+  <url>
+    <loc>https://evaranest.braintechtools.xyz/collections/all-products</loc>
+    <lastmod>2026-09-30</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://evaranest.braintechtools.xyz/collections/all-candles</loc>
+    <lastmod>2026-09-30</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://evaranest.braintechtools.xyz/collections/jar-candles</loc>
+    <lastmod>2026-09-30</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://evaranest.braintechtools.xyz/collections/decorative-candles</loc>
+    <lastmod>2026-09-30</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://evaranest.braintechtools.xyz/collections/festive-candles</loc>
+    <lastmod>2026-09-30</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://evaranest.braintechtools.xyz/collections/tealights</loc>
+    <lastmod>2026-09-30</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://evaranest.braintechtools.xyz/collections/home-fragrance</loc>
+    <lastmod>2026-09-30</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://evaranest.braintechtools.xyz/collections/wax-melts</loc>
+    <lastmod>2026-09-30</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://evaranest.braintechtools.xyz/collections/diffusers</loc>
+    <lastmod>2026-09-30</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://evaranest.braintechtools.xyz/collections/diffuser-melts</loc>
+    <lastmod>2026-09-30</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://evaranest.braintechtools.xyz/collections/body-fragrance</loc>
+    <lastmod>2026-09-30</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://evaranest.braintechtools.xyz/collections/solid-body-perfume</loc>
+    <lastmod>2026-09-30</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://evaranest.braintechtools.xyz/collections/perfumed-sanitizers</loc>
+    <lastmod>2026-09-30</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://evaranest.braintechtools.xyz/collections/custom-orders</loc>
+    <lastmod>2026-09-30</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://evaranest.braintechtools.xyz/collections/hampers</loc>
+    <lastmod>2026-09-30</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://evaranest.braintechtools.xyz/collections/new-arrivals</loc>
+    <lastmod>2026-09-30</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://evaranest.braintechtools.xyz/collections/best-sellers</loc>
+    <lastmod>2026-09-30</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- Individual Products -->
+  <url>
+    <loc>https://evaranest.braintechtools.xyz/products/the-cozy-ritual-set</loc>
+    <lastmod>2026-09-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://evaranest.braintechtools.xyz/images/products/the-cozy-ritual-set.jpg</image:loc>
+      <image:title><![CDATA[The Cozy Ritual Set - Luxury Handmade Candle by EvaraNest]]></image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://evaranest.braintechtools.xyz/products/mushroom-candle</loc>
+    <lastmod>2026-09-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://evaranest.braintechtools.xyz/images/products/mushroom-candle.jpg</image:loc>
+      <image:title><![CDATA[Artisanal Mushroom Candle - Luxury Handmade Candle by EvaraNest]]></image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://evaranest.braintechtools.xyz/products/mini-bubble-candle-set</loc>
+    <lastmod>2026-09-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://evaranest.braintechtools.xyz/images/products/mini-bubble-candle-set.jpg</image:loc>
+      <image:title><![CDATA[Mini Bubble Candle Set (Pack of 5) - Luxury Handmade Candle by EvaraNest]]></image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://evaranest.braintechtools.xyz/products/big-bubble-candle</loc>
+    <lastmod>2026-09-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://evaranest.braintechtools.xyz/images/products/big-bubble-candle.jpg</image:loc>
+      <image:title><![CDATA[Statement Big Bubble Candle - Luxury Handmade Candle by EvaraNest]]></image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://evaranest.braintechtools.xyz/products/daisy-floating-candle</loc>
+    <lastmod>2026-09-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://evaranest.braintechtools.xyz/images/products/daisy-floating-candle.jpg</image:loc>
+      <image:title><![CDATA[Daisy Floating Candles (Set of 5) - Luxury Handmade Candle by EvaraNest]]></image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://evaranest.braintechtools.xyz/products/shell-jar-candle</loc>
+    <lastmod>2026-09-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://evaranest.braintechtools.xyz/images/products/shell-jar-candle.jpg</image:loc>
+      <image:title><![CDATA[Coastal Shell Jar Candle - Luxury Handmade Candle by EvaraNest]]></image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://evaranest.braintechtools.xyz/products/colored-glass-jar-candles</loc>
+    <lastmod>2026-09-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://evaranest.braintechtools.xyz/images/products/colored-glass-jar-candles.jpg</image:loc>
+      <image:title><![CDATA[Colored Glass Jar Candles (Pack of 2) - Luxury Handmade Candle by EvaraNest]]></image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://evaranest.braintechtools.xyz/products/festive-candle-box</loc>
+    <lastmod>2026-09-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://evaranest.braintechtools.xyz/images/products/festive-candle-box.jpg</image:loc>
+      <image:title><![CDATA[Festive Candle Gift Box (2 Laddu + 2 Modak) - Luxury Handmade Candle by EvaraNest]]></image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://evaranest.braintechtools.xyz/products/spiral-taper-candles</loc>
+    <lastmod>2026-09-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://evaranest.braintechtools.xyz/images/products/spiral-taper-candles.jpg</image:loc>
+      <image:title><![CDATA[Spiral Taper Candles (Set of 3) - Luxury Handmade Candle by EvaraNest]]></image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://evaranest.braintechtools.xyz/products/mandala-tin-jar-healing-candle</loc>
+    <lastmod>2026-09-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://evaranest.braintechtools.xyz/images/products/mandala-tin-jar-healing-candle.jpg</image:loc>
+      <image:title><![CDATA[Mandala Tin Jar Healing Candle - Luxury Handmade Candle by EvaraNest]]></image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://evaranest.braintechtools.xyz/products/rabbit-candle</loc>
+    <lastmod>2026-09-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://evaranest.braintechtools.xyz/images/products/rabbit-candle.jpg</image:loc>
+      <image:title><![CDATA[Artisanal Bunny Rabbit Candle - Luxury Handmade Candle by EvaraNest]]></image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://evaranest.braintechtools.xyz/products/large-floral-urli</loc>
+    <lastmod>2026-09-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://evaranest.braintechtools.xyz/images/products/large-floral-urli.jpg</image:loc>
+      <image:title><![CDATA[Grand Floral Brass Urli Candle - Luxury Handmade Candle by EvaraNest]]></image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://evaranest.braintechtools.xyz/products/heart-tealights</loc>
+    <lastmod>2026-09-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://evaranest.braintechtools.xyz/images/products/heart-tealights.jpg</image:loc>
+      <image:title><![CDATA[Heart Tealights (Set of 10) - Luxury Handmade Candle by EvaraNest]]></image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://evaranest.braintechtools.xyz/products/small-floral-urli</loc>
+    <lastmod>2026-09-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://evaranest.braintechtools.xyz/images/products/small-floral-urli.jpg</image:loc>
+      <image:title><![CDATA[Petite Floral Urli Candle - Luxury Handmade Candle by EvaraNest]]></image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://evaranest.braintechtools.xyz/products/scents-that-stay-with-you</loc>
+    <lastmod>2026-09-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://evaranest.braintechtools.xyz/images/products/scents-that-stay-with-you.jpg</image:loc>
+      <image:title><![CDATA[Scents That Stay With You - Luxury Color Jar - Luxury Handmade Candle by EvaraNest]]></image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://evaranest.braintechtools.xyz/products/perfume-bars</loc>
+    <lastmod>2026-09-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://evaranest.braintechtools.xyz/images/products/perfume-bars.jpg</image:loc>
+      <image:title><![CDATA[Artisanal Botanical Wax Perfume Bars - Luxury Handmade Candle by EvaraNest]]></image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://evaranest.braintechtools.xyz/products/vanilla-amber-glow-candle</loc>
+    <lastmod>2026-09-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1603006905003-be475563bc59?auto=format&fit=crop&w=1200&q=80</image:loc>
+      <image:title><![CDATA[Vanilla Amber Glow Candle - Luxury Handmade Candle by EvaraNest]]></image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1602874801007-bd458bb1b8b6?auto=format&fit=crop&w=1200&q=80</image:loc>
+      <image:title><![CDATA[Vanilla Amber Glow Candle - Luxury Handmade Candle by EvaraNest]]></image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://images.pexels.com/photos/6755742/pexels-photo-6755742.jpeg?auto=compress&cs=tinysrgb&w=1200</image:loc>
+      <image:title><![CDATA[Vanilla Amber Glow Candle - Luxury Handmade Candle by EvaraNest]]></image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://evaranest.braintechtools.xyz/products/rose-petal-luxury-candle</loc>
+    <lastmod>2026-09-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://images.pexels.com/photos/11431774/pexels-photo-11431774.jpeg?auto=compress&cs=tinysrgb&w=1200</image:loc>
+      <image:title><![CDATA[Rose Petal Luxury Candle - Luxury Handmade Candle by EvaraNest]]></image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://images.pexels.com/photos/3865794/pexels-photo-3865794.jpeg?auto=compress&cs=tinysrgb&w=1200</image:loc>
+      <image:title><![CDATA[Rose Petal Luxury Candle - Luxury Handmade Candle by EvaraNest]]></image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1603006905003-be475563bc59?auto=format&fit=crop&w=1200&q=80</image:loc>
+      <image:title><![CDATA[Rose Petal Luxury Candle - Luxury Handmade Candle by EvaraNest]]></image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://evaranest.braintechtools.xyz/products/midnight-oud-candle</loc>
+    <lastmod>2026-09-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1602874801007-bd458bb1b8b6?auto=format&fit=crop&w=1200&q=80</image:loc>
+      <image:title><![CDATA[Midnight Oud Candle - Luxury Handmade Candle by EvaraNest]]></image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://images.pexels.com/photos/19783022/pexels-photo-19783022.jpeg?auto=compress&cs=tinysrgb&w=1200</image:loc>
+      <image:title><![CDATA[Midnight Oud Candle - Luxury Handmade Candle by EvaraNest]]></image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://images.pexels.com/photos/4612501/pexels-photo-4612501.jpeg?auto=compress&cs=tinysrgb&w=1200</image:loc>
+      <image:title><![CDATA[Midnight Oud Candle - Luxury Handmade Candle by EvaraNest]]></image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://evaranest.braintechtools.xyz/products/french-vanilla-soy-candle</loc>
+    <lastmod>2026-09-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://images.pexels.com/photos/6755742/pexels-photo-6755742.jpeg?auto=compress&cs=tinysrgb&w=1200</image:loc>
+      <image:title><![CDATA[French Vanilla Soy Candle - Luxury Handmade Candle by EvaraNest]]></image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1603006905003-be475563bc59?auto=format&fit=crop&w=1200&q=80</image:loc>
+      <image:title><![CDATA[French Vanilla Soy Candle - Luxury Handmade Candle by EvaraNest]]></image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://images.pexels.com/photos/4612501/pexels-photo-4612501.jpeg?auto=compress&cs=tinysrgb&w=1200</image:loc>
+      <image:title><![CDATA[French Vanilla Soy Candle - Luxury Handmade Candle by EvaraNest]]></image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://evaranest.braintechtools.xyz/products/jasmine-bloom-candle</loc>
+    <lastmod>2026-09-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://images.pexels.com/photos/11431774/pexels-photo-11431774.jpeg?auto=compress&cs=tinysrgb&w=1200</image:loc>
+      <image:title><![CDATA[Jasmine Bloom Candle - Luxury Handmade Candle by EvaraNest]]></image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1603006905003-be475563bc59?auto=format&fit=crop&w=1200&q=80</image:loc>
+      <image:title><![CDATA[Jasmine Bloom Candle - Luxury Handmade Candle by EvaraNest]]></image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://images.pexels.com/photos/3865794/pexels-photo-3865794.jpeg?auto=compress&cs=tinysrgb&w=1200</image:loc>
+      <image:title><![CDATA[Jasmine Bloom Candle - Luxury Handmade Candle by EvaraNest]]></image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://evaranest.braintechtools.xyz/products/coffee-house-candle</loc>
+    <lastmod>2026-09-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://images.pexels.com/photos/19783022/pexels-photo-19783022.jpeg?auto=compress&cs=tinysrgb&w=1200</image:loc>
+      <image:title><![CDATA[Coffee House Candle - Luxury Handmade Candle by EvaraNest]]></image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1602874801007-bd458bb1b8b6?auto=format&fit=crop&w=1200&q=80</image:loc>
+      <image:title><![CDATA[Coffee House Candle - Luxury Handmade Candle by EvaraNest]]></image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://images.pexels.com/photos/6755742/pexels-photo-6755742.jpeg?auto=compress&cs=tinysrgb&w=1200</image:loc>
+      <image:title><![CDATA[Coffee House Candle - Luxury Handmade Candle by EvaraNest]]></image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://evaranest.braintechtools.xyz/products/golden-vanilla-candle</loc>
+    <lastmod>2026-09-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1603006905003-be475563bc59?auto=format&fit=crop&w=1200&q=80</image:loc>
+      <image:title><![CDATA[Golden Vanilla Candle - Luxury Handmade Candle by EvaraNest]]></image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1513885535751-8b9238bd345a?auto=format&fit=crop&w=1200&q=80</image:loc>
+      <image:title><![CDATA[Golden Vanilla Candle - Luxury Handmade Candle by EvaraNest]]></image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1602874801007-bd458bb1b8b6?auto=format&fit=crop&w=1200&q=80</image:loc>
+      <image:title><![CDATA[Golden Vanilla Candle - Luxury Handmade Candle by EvaraNest]]></image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://evaranest.braintechtools.xyz/products/forest-mist-candle</loc>
+    <lastmod>2026-09-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://images.pexels.com/photos/4612501/pexels-photo-4612501.jpeg?auto=compress&cs=tinysrgb&w=1200</image:loc>
+      <image:title><![CDATA[Forest Mist Candle - Luxury Handmade Candle by EvaraNest]]></image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://images.pexels.com/photos/19783022/pexels-photo-19783022.jpeg?auto=compress&cs=tinysrgb&w=1200</image:loc>
+      <image:title><![CDATA[Forest Mist Candle - Luxury Handmade Candle by EvaraNest]]></image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://images.pexels.com/photos/3865794/pexels-photo-3865794.jpeg?auto=compress&cs=tinysrgb&w=1200</image:loc>
+      <image:title><![CDATA[Forest Mist Candle - Luxury Handmade Candle by EvaraNest]]></image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://evaranest.braintechtools.xyz/products/strawberry-cream-candle</loc>
+    <lastmod>2026-09-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://images.pexels.com/photos/11431774/pexels-photo-11431774.jpeg?auto=compress&cs=tinysrgb&w=1200</image:loc>
+      <image:title><![CDATA[Strawberry Cream Candle - Luxury Handmade Candle by EvaraNest]]></image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1513885535751-8b9238bd345a?auto=format&fit=crop&w=1200&q=80</image:loc>
+      <image:title><![CDATA[Strawberry Cream Candle - Luxury Handmade Candle by EvaraNest]]></image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1603006905003-be475563bc59?auto=format&fit=crop&w=1200&q=80</image:loc>
+      <image:title><![CDATA[Strawberry Cream Candle - Luxury Handmade Candle by EvaraNest]]></image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://evaranest.braintechtools.xyz/products/berry-bliss-candle</loc>
+    <lastmod>2026-09-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://images.pexels.com/photos/11431774/pexels-photo-11431774.jpeg?auto=compress&cs=tinysrgb&w=1200</image:loc>
+      <image:title><![CDATA[Berry Bliss Candle - Luxury Handmade Candle by EvaraNest]]></image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1603006905003-be475563bc59?auto=format&fit=crop&w=1200&q=80</image:loc>
+      <image:title><![CDATA[Berry Bliss Candle - Luxury Handmade Candle by EvaraNest]]></image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1513885535751-8b9238bd345a?auto=format&fit=crop&w=1200&q=80</image:loc>
+      <image:title><![CDATA[Berry Bliss Candle - Luxury Handmade Candle by EvaraNest]]></image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://evaranest.braintechtools.xyz/products/sandalwood-serenity-candle</loc>
+    <lastmod>2026-09-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1602874801007-bd458bb1b8b6?auto=format&fit=crop&w=1200&q=80</image:loc>
+      <image:title><![CDATA[Sandalwood Serenity Pillar Candle - Luxury Handmade Candle by EvaraNest]]></image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://images.pexels.com/photos/19783022/pexels-photo-19783022.jpeg?auto=compress&cs=tinysrgb&w=1200</image:loc>
+      <image:title><![CDATA[Sandalwood Serenity Pillar Candle - Luxury Handmade Candle by EvaraNest]]></image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://images.pexels.com/photos/4612501/pexels-photo-4612501.jpeg?auto=compress&cs=tinysrgb&w=1200</image:loc>
+      <image:title><![CDATA[Sandalwood Serenity Pillar Candle - Luxury Handmade Candle by EvaraNest]]></image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://evaranest.braintechtools.xyz/products/bubble-cube-decorative-candle</loc>
+    <lastmod>2026-09-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://images.pexels.com/photos/6755742/pexels-photo-6755742.jpeg?auto=compress&cs=tinysrgb&w=1200</image:loc>
+      <image:title><![CDATA[Sculptural Bubble Cube Candle - Luxury Handmade Candle by EvaraNest]]></image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://images.pexels.com/photos/4612501/pexels-photo-4612501.jpeg?auto=compress&cs=tinysrgb&w=1200</image:loc>
+      <image:title><![CDATA[Sculptural Bubble Cube Candle - Luxury Handmade Candle by EvaraNest]]></image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1603006905003-be475563bc59?auto=format&fit=crop&w=1200&q=80</image:loc>
+      <image:title><![CDATA[Sculptural Bubble Cube Candle - Luxury Handmade Candle by EvaraNest]]></image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://evaranest.braintechtools.xyz/products/warm-cinnamon-spice-candle</loc>
+    <lastmod>2026-09-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://images.pexels.com/photos/19783022/pexels-photo-19783022.jpeg?auto=compress&cs=tinysrgb&w=1200</image:loc>
+      <image:title><![CDATA[Warm Cinnamon Spice Festive Candle - Luxury Handmade Candle by EvaraNest]]></image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1602874801007-bd458bb1b8b6?auto=format&fit=crop&w=1200&q=80</image:loc>
+      <image:title><![CDATA[Warm Cinnamon Spice Festive Candle - Luxury Handmade Candle by EvaraNest]]></image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1603006905003-be475563bc59?auto=format&fit=crop&w=1200&q=80</image:loc>
+      <image:title><![CDATA[Warm Cinnamon Spice Festive Candle - Luxury Handmade Candle by EvaraNest]]></image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://evaranest.braintechtools.xyz/products/champagne-luxe-candle</loc>
+    <lastmod>2026-09-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1513885535751-8b9238bd345a?auto=format&fit=crop&w=1200&q=80</image:loc>
+      <image:title><![CDATA[Champagne Luxe Celebration Candle - Luxury Handmade Candle by EvaraNest]]></image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1603006905003-be475563bc59?auto=format&fit=crop&w=1200&q=80</image:loc>
+      <image:title><![CDATA[Champagne Luxe Celebration Candle - Luxury Handmade Candle by EvaraNest]]></image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://images.pexels.com/photos/4612501/pexels-photo-4612501.jpeg?auto=compress&cs=tinysrgb&w=1200</image:loc>
+      <image:title><![CDATA[Champagne Luxe Celebration Candle - Luxury Handmade Candle by EvaraNest]]></image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://evaranest.braintechtools.xyz/products/diwali-golden-glow-candle</loc>
+    <lastmod>2026-09-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1513885535751-8b9238bd345a?auto=format&fit=crop&w=1200&q=80</image:loc>
+      <image:title><![CDATA[Golden Festive Brass Jar Candle - Luxury Handmade Candle by EvaraNest]]></image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1602874801007-bd458bb1b8b6?auto=format&fit=crop&w=1200&q=80</image:loc>
+      <image:title><![CDATA[Golden Festive Brass Jar Candle - Luxury Handmade Candle by EvaraNest]]></image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://images.pexels.com/photos/19783022/pexels-photo-19783022.jpeg?auto=compress&cs=tinysrgb&w=1200</image:loc>
+      <image:title><![CDATA[Golden Festive Brass Jar Candle - Luxury Handmade Candle by EvaraNest]]></image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://evaranest.braintechtools.xyz/products/scented-soy-tealights-pack-of-12</loc>
+    <lastmod>2026-09-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1603006905003-be475563bc59?auto=format&fit=crop&w=1200&q=80</image:loc>
+      <image:title><![CDATA[Aromatic Soy Tealights (Set of 12) - Luxury Handmade Candle by EvaraNest]]></image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://images.pexels.com/photos/11431774/pexels-photo-11431774.jpeg?auto=compress&cs=tinysrgb&w=1200</image:loc>
+      <image:title><![CDATA[Aromatic Soy Tealights (Set of 12) - Luxury Handmade Candle by EvaraNest]]></image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://images.pexels.com/photos/6755742/pexels-photo-6755742.jpeg?auto=compress&cs=tinysrgb&w=1200</image:loc>
+      <image:title><![CDATA[Aromatic Soy Tealights (Set of 12) - Luxury Handmade Candle by EvaraNest]]></image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://evaranest.braintechtools.xyz/products/french-vanilla-tealights-pack</loc>
+    <lastmod>2026-09-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://images.pexels.com/photos/6755742/pexels-photo-6755742.jpeg?auto=compress&cs=tinysrgb&w=1200</image:loc>
+      <image:title><![CDATA[French Vanilla Tealights (Set of 6) - Luxury Handmade Candle by EvaraNest]]></image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1603006905003-be475563bc59?auto=format&fit=crop&w=1200&q=80</image:loc>
+      <image:title><![CDATA[French Vanilla Tealights (Set of 6) - Luxury Handmade Candle by EvaraNest]]></image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://images.pexels.com/photos/4612501/pexels-photo-4612501.jpeg?auto=compress&cs=tinysrgb&w=1200</image:loc>
+      <image:title><![CDATA[French Vanilla Tealights (Set of 6) - Luxury Handmade Candle by EvaraNest]]></image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://evaranest.braintechtools.xyz/products/lavender-vanilla-soy-wax-melts</loc>
+    <lastmod>2026-09-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://images.pexels.com/photos/3865794/pexels-photo-3865794.jpeg?auto=compress&cs=tinysrgb&w=1200</image:loc>
+      <image:title><![CDATA[Lavender Vanilla Soy Wax Melts - Luxury Handmade Candle by EvaraNest]]></image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://images.pexels.com/photos/6755742/pexels-photo-6755742.jpeg?auto=compress&cs=tinysrgb&w=1200</image:loc>
+      <image:title><![CDATA[Lavender Vanilla Soy Wax Melts - Luxury Handmade Candle by EvaraNest]]></image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1603006905003-be475563bc59?auto=format&fit=crop&w=1200&q=80</image:loc>
+      <image:title><![CDATA[Lavender Vanilla Soy Wax Melts - Luxury Handmade Candle by EvaraNest]]></image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://evaranest.braintechtools.xyz/products/rose-oud-botanical-wax-melts</loc>
+    <lastmod>2026-09-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://images.pexels.com/photos/11431774/pexels-photo-11431774.jpeg?auto=compress&cs=tinysrgb&w=1200</image:loc>
+      <image:title><![CDATA[Rose & Oud Botanical Wax Melts - Luxury Handmade Candle by EvaraNest]]></image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1602874801007-bd458bb1b8b6?auto=format&fit=crop&w=1200&q=80</image:loc>
+      <image:title><![CDATA[Rose & Oud Botanical Wax Melts - Luxury Handmade Candle by EvaraNest]]></image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://images.pexels.com/photos/3865794/pexels-photo-3865794.jpeg?auto=compress&cs=tinysrgb&w=1200</image:loc>
+      <image:title><![CDATA[Rose & Oud Botanical Wax Melts - Luxury Handmade Candle by EvaraNest]]></image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://evaranest.braintechtools.xyz/products/ocean-breeze-reed-diffuser</loc>
+    <lastmod>2026-09-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://images.pexels.com/photos/4612501/pexels-photo-4612501.jpeg?auto=compress&cs=tinysrgb&w=1200</image:loc>
+      <image:title><![CDATA[Ocean Breeze Reed Diffuser - Luxury Handmade Candle by EvaraNest]]></image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://images.pexels.com/photos/3865794/pexels-photo-3865794.jpeg?auto=compress&cs=tinysrgb&w=1200</image:loc>
+      <image:title><![CDATA[Ocean Breeze Reed Diffuser - Luxury Handmade Candle by EvaraNest]]></image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://images.pexels.com/photos/6755742/pexels-photo-6755742.jpeg?auto=compress&cs=tinysrgb&w=1200</image:loc>
+      <image:title><![CDATA[Ocean Breeze Reed Diffuser - Luxury Handmade Candle by EvaraNest]]></image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://evaranest.braintechtools.xyz/products/amber-sandalwood-reed-diffuser</loc>
+    <lastmod>2026-09-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1602874801007-bd458bb1b8b6?auto=format&fit=crop&w=1200&q=80</image:loc>
+      <image:title><![CDATA[Amber Sandalwood Reed Diffuser - Luxury Handmade Candle by EvaraNest]]></image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://images.pexels.com/photos/19783022/pexels-photo-19783022.jpeg?auto=compress&cs=tinysrgb&w=1200</image:loc>
+      <image:title><![CDATA[Amber Sandalwood Reed Diffuser - Luxury Handmade Candle by EvaraNest]]></image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1603006905003-be475563bc59?auto=format&fit=crop&w=1200&q=80</image:loc>
+      <image:title><![CDATA[Amber Sandalwood Reed Diffuser - Luxury Handmade Candle by EvaraNest]]></image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://evaranest.braintechtools.xyz/products/calm-spa-diffuser-melts</loc>
+    <lastmod>2026-09-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://images.pexels.com/photos/3865794/pexels-photo-3865794.jpeg?auto=compress&cs=tinysrgb&w=1200</image:loc>
+      <image:title><![CDATA[Calm Spa Aromatherapy Diffuser Melts - Luxury Handmade Candle by EvaraNest]]></image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://images.pexels.com/photos/4612501/pexels-photo-4612501.jpeg?auto=compress&cs=tinysrgb&w=1200</image:loc>
+      <image:title><![CDATA[Calm Spa Aromatherapy Diffuser Melts - Luxury Handmade Candle by EvaraNest]]></image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://images.pexels.com/photos/6755742/pexels-photo-6755742.jpeg?auto=compress&cs=tinysrgb&w=1200</image:loc>
+      <image:title><![CDATA[Calm Spa Aromatherapy Diffuser Melts - Luxury Handmade Candle by EvaraNest]]></image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://evaranest.braintechtools.xyz/products/velvet-rose-solid-body-perfume</loc>
+    <lastmod>2026-09-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://images.pexels.com/photos/11431774/pexels-photo-11431774.jpeg?auto=compress&cs=tinysrgb&w=1200</image:loc>
+      <image:title><![CDATA[Velvet Rose Solid Body Perfume - Luxury Handmade Candle by EvaraNest]]></image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1513885535751-8b9238bd345a?auto=format&fit=crop&w=1200&q=80</image:loc>
+      <image:title><![CDATA[Velvet Rose Solid Body Perfume - Luxury Handmade Candle by EvaraNest]]></image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://images.pexels.com/photos/6755742/pexels-photo-6755742.jpeg?auto=compress&cs=tinysrgb&w=1200</image:loc>
+      <image:title><![CDATA[Velvet Rose Solid Body Perfume - Luxury Handmade Candle by EvaraNest]]></image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://evaranest.braintechtools.xyz/products/oud-amber-solid-body-perfume</loc>
+    <lastmod>2026-09-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1602874801007-bd458bb1b8b6?auto=format&fit=crop&w=1200&q=80</image:loc>
+      <image:title><![CDATA[Oud & Amber Solid Body Perfume - Luxury Handmade Candle by EvaraNest]]></image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://images.pexels.com/photos/19783022/pexels-photo-19783022.jpeg?auto=compress&cs=tinysrgb&w=1200</image:loc>
+      <image:title><![CDATA[Oud & Amber Solid Body Perfume - Luxury Handmade Candle by EvaraNest]]></image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1513885535751-8b9238bd345a?auto=format&fit=crop&w=1200&q=80</image:loc>
+      <image:title><![CDATA[Oud & Amber Solid Body Perfume - Luxury Handmade Candle by EvaraNest]]></image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://evaranest.braintechtools.xyz/products/lavender-mist-perfumed-sanitizer</loc>
+    <lastmod>2026-09-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://images.pexels.com/photos/3865794/pexels-photo-3865794.jpeg?auto=compress&cs=tinysrgb&w=1200</image:loc>
+      <image:title><![CDATA[Lavender Mist Perfumed Sanitizer (100ml) - Luxury Handmade Candle by EvaraNest]]></image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://images.pexels.com/photos/6755742/pexels-photo-6755742.jpeg?auto=compress&cs=tinysrgb&w=1200</image:loc>
+      <image:title><![CDATA[Lavender Mist Perfumed Sanitizer (100ml) - Luxury Handmade Candle by EvaraNest]]></image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://images.pexels.com/photos/4612501/pexels-photo-4612501.jpeg?auto=compress&cs=tinysrgb&w=1200</image:loc>
+      <image:title><![CDATA[Lavender Mist Perfumed Sanitizer (100ml) - Luxury Handmade Candle by EvaraNest]]></image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://evaranest.braintechtools.xyz/products/citrus-bloom-perfumed-sanitizer</loc>
+    <lastmod>2026-09-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1513885535751-8b9238bd345a?auto=format&fit=crop&w=1200&q=80</image:loc>
+      <image:title><![CDATA[Citrus Bloom Perfumed Sanitizer (100ml) - Luxury Handmade Candle by EvaraNest]]></image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1603006905003-be475563bc59?auto=format&fit=crop&w=1200&q=80</image:loc>
+      <image:title><![CDATA[Citrus Bloom Perfumed Sanitizer (100ml) - Luxury Handmade Candle by EvaraNest]]></image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://images.pexels.com/photos/6755742/pexels-photo-6755742.jpeg?auto=compress&cs=tinysrgb&w=1200</image:loc>
+      <image:title><![CDATA[Citrus Bloom Perfumed Sanitizer (100ml) - Luxury Handmade Candle by EvaraNest]]></image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://evaranest.braintechtools.xyz/products/personalised-name-jar-candle</loc>
+    <lastmod>2026-09-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://images.pexels.com/photos/6755742/pexels-photo-6755742.jpeg?auto=compress&cs=tinysrgb&w=1200</image:loc>
+      <image:title><![CDATA[Personalised Name Jar Candle - Luxury Handmade Candle by EvaraNest]]></image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1513885535751-8b9238bd345a?auto=format&fit=crop&w=1200&q=80</image:loc>
+      <image:title><![CDATA[Personalised Name Jar Candle - Luxury Handmade Candle by EvaraNest]]></image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1603006905003-be475563bc59?auto=format&fit=crop&w=1200&q=80</image:loc>
+      <image:title><![CDATA[Personalised Name Jar Candle - Luxury Handmade Candle by EvaraNest]]></image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://evaranest.braintechtools.xyz/products/custom-monogram-luxury-candle</loc>
+    <lastmod>2026-09-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1513885535751-8b9238bd345a?auto=format&fit=crop&w=1200&q=80</image:loc>
+      <image:title><![CDATA[Custom Monogram Gold Candle - Luxury Handmade Candle by EvaraNest]]></image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1602874801007-bd458bb1b8b6?auto=format&fit=crop&w=1200&q=80</image:loc>
+      <image:title><![CDATA[Custom Monogram Gold Candle - Luxury Handmade Candle by EvaraNest]]></image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://images.pexels.com/photos/19783022/pexels-photo-19783022.jpeg?auto=compress&cs=tinysrgb&w=1200</image:loc>
+      <image:title><![CDATA[Custom Monogram Gold Candle - Luxury Handmade Candle by EvaraNest]]></image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://evaranest.braintechtools.xyz/products/artisan-gift-hamper</loc>
+    <lastmod>2026-09-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1513885535751-8b9238bd345a?auto=format&fit=crop&w=1200&q=80</image:loc>
+      <image:title><![CDATA[Artisan Candle Gift Hamper - Luxury Handmade Candle by EvaraNest]]></image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1603006905003-be475563bc59?auto=format&fit=crop&w=1200&q=80</image:loc>
+      <image:title><![CDATA[Artisan Candle Gift Hamper - Luxury Handmade Candle by EvaraNest]]></image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://images.pexels.com/photos/11431774/pexels-photo-11431774.jpeg?auto=compress&cs=tinysrgb&w=1200</image:loc>
+      <image:title><![CDATA[Artisan Candle Gift Hamper - Luxury Handmade Candle by EvaraNest]]></image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://evaranest.braintechtools.xyz/products/luxury-celebration-hamper-box</loc>
+    <lastmod>2026-09-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1513885535751-8b9238bd345a?auto=format&fit=crop&w=1200&q=80</image:loc>
+      <image:title><![CDATA[Grand Celebration Fragrance Hamper - Luxury Handmade Candle by EvaraNest]]></image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://images.pexels.com/photos/6755742/pexels-photo-6755742.jpeg?auto=compress&cs=tinysrgb&w=1200</image:loc>
+      <image:title><![CDATA[Grand Celebration Fragrance Hamper - Luxury Handmade Candle by EvaraNest]]></image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1602874801007-bd458bb1b8b6?auto=format&fit=crop&w=1200&q=80</image:loc>
+      <image:title><![CDATA[Grand Celebration Fragrance Hamper - Luxury Handmade Candle by EvaraNest]]></image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://evaranest.braintechtools.xyz/products/wedding-favor-candle-box-bulk</loc>
+    <lastmod>2026-09-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1513885535751-8b9238bd345a?auto=format&fit=crop&w=1200&q=80</image:loc>
+      <image:title><![CDATA[Wedding Favors & Return Gifts (Pack of 25) - Luxury Handmade Candle by EvaraNest]]></image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://images.pexels.com/photos/11431774/pexels-photo-11431774.jpeg?auto=compress&cs=tinysrgb&w=1200</image:loc>
+      <image:title><![CDATA[Wedding Favors & Return Gifts (Pack of 25) - Luxury Handmade Candle by EvaraNest]]></image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1603006905003-be475563bc59?auto=format&fit=crop&w=1200&q=80</image:loc>
+      <image:title><![CDATA[Wedding Favors & Return Gifts (Pack of 25) - Luxury Handmade Candle by EvaraNest]]></image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://evaranest.braintechtools.xyz/products/corporate-bulk-gifting-pack</loc>
+    <lastmod>2026-09-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1602874801007-bd458bb1b8b6?auto=format&fit=crop&w=1200&q=80</image:loc>
+      <image:title><![CDATA[Corporate Appreciation Gift Boxes (Pack of 10) - Luxury Handmade Candle by EvaraNest]]></image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1513885535751-8b9238bd345a?auto=format&fit=crop&w=1200&q=80</image:loc>
+      <image:title><![CDATA[Corporate Appreciation Gift Boxes (Pack of 10) - Luxury Handmade Candle by EvaraNest]]></image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://images.pexels.com/photos/19783022/pexels-photo-19783022.jpeg?auto=compress&cs=tinysrgb&w=1200</image:loc>
+      <image:title><![CDATA[Corporate Appreciation Gift Boxes (Pack of 10) - Luxury Handmade Candle by EvaraNest]]></image:title>
+    </image:image>
+  </url>
+
+  <!-- Info, Guides & Policy Pages -->
+  <url>
+    <loc>https://evaranest.braintechtools.xyz/custom-orders</loc>
+    <lastmod>2026-09-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://evaranest.braintechtools.xyz/pages/about-us</loc>
+    <lastmod>2026-09-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://evaranest.braintechtools.xyz/pages/candle-care</loc>
+    <lastmod>2026-09-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://evaranest.braintechtools.xyz/pages/work-with-us</loc>
+    <lastmod>2026-09-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://evaranest.braintechtools.xyz/policies/shipping-policy</loc>
+    <lastmod>2026-09-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://evaranest.braintechtools.xyz/policies/refund-policy</loc>
+    <lastmod>2026-09-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://evaranest.braintechtools.xyz/policies/terms-of-service</loc>
+    <lastmod>2026-09-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://evaranest.braintechtools.xyz/policies/privacy-policy</loc>
+    <lastmod>2026-09-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://evaranest.braintechtools.xyz/policies/contact-information</loc>
+    <lastmod>2026-09-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://evaranest.braintechtools.xyz/track</loc>
+    <lastmod>2026-09-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+</urlset>

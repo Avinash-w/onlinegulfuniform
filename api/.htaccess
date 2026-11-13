@@ -1,0 +1,13 @@
+DirectorySlash Off
+RewriteEngine On
+
+# Pass Authorization header through to PHP (Apache often strips it)
+RewriteCond %{HTTP:Authorization} .
+RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
+# Allow direct access to real files (uploads files like .jpg/.png)
+RewriteCond %{REQUEST_FILENAME} -f
+RewriteRule ^ - [L]
+
+# Front controller
+RewriteRule ^ index.php [QSA,L]

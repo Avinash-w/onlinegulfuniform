@@ -1,0 +1,24 @@
+# robots.txt for https://evaranest.braintechtools.xyz/
+User-agent: *
+Allow: /
+Allow: /collections/*
+Allow: /products/*
+Allow: /pages/*
+Allow: /policies/*
+Allow: /custom-orders
+Allow: /track
+
+# Disallow private user & admin endpoints
+Disallow: /admin
+Disallow: /admin/*
+Disallow: /api/*
+Disallow: /checkout
+Disallow: /account
+Disallow: /account/*
+Disallow: /login
+
+# Crawl Delay
+Crawl-delay: 1
+
+# Sitemap Location
+Sitemap: https://evaranest.braintechtools.xyz/sitemap.xml

@@ -1,0 +1,276 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    -webkit-font-smoothing: antialiased;
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-cream text-ink font-sans text-[13px] md:text-sm;
+  }
+  /* Cap weight — no bold / extrabold anywhere */
+  .font-bold,
+  .font-extrabold,
+  .font-black {
+    @apply font-semibold;
+  }
+  ::selection {
+    background-color: #4849E8;
+    color: #ffffff;
+  }
+}
+
+@layer components {
+  /* Solid Brand CTA — "ADD TO CART", "VIEW ALL ..." */
+  .btn-ink {
+    @apply inline-flex items-center justify-center gap-2
+           uppercase tracking-wider2 font-semibold text-[10.5px] sm:text-[11px] md:text-xs
+           px-4 py-2 sm:px-6 sm:py-2.5 transition-all duration-200 shadow-sm hover:shadow-md
+           active:scale-[0.99] disabled:opacity-40 disabled:cursor-not-allowed rounded-lg;
+    background-color: #4849E8;
+    color: #ffffff;
+  }
+  .btn-ink:hover:not(:disabled) {
+    background-color: #1B1947;
+    color: #ffffff;
+  }
+
+  /* Outlined pill — secondary CTA */
+  .btn-outline {
+    @apply inline-flex items-center justify-center gap-2 border
+           uppercase tracking-wider2 font-semibold text-[10.5px] sm:text-[11px] md:text-xs
+           px-3 py-1.5 sm:px-6 sm:py-2.5 transition-all duration-200 active:scale-[0.99]
+           disabled:opacity-40 disabled:cursor-not-allowed rounded-lg;
+    border-color: #4849E8;
+    color: #4849E8;
+  }
+  .btn-outline:hover:not(:disabled) {
+    background-color: #4849E8;
+    color: #ffffff;
+  }
+
+  /* Section title — big condensed display caps, centred */
+  .section-title {
+    @apply font-display uppercase text-center text-[26px] leading-none
+           md:text-[30px] lg:text-[30px] tracking-tight text-ink;
+  }
+  /* Small all-caps label used across nav + filters */
+  .label-caps {
+    @apply uppercase tracking-wider2 text-[11px] font-semibold;
+  }
+  .hide-scrollbar {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Dual-range price slider — Modern centered circular handles */
+  .price-dual-range {
+    --thumb: #4849E8;
+    --track: #E8E5DF;
+    --fill: #4849E8;
+    position: relative;
+    height: 32px;
+    display: flex;
+    align-items: center;
+  }
+  .price-dual-range__rail {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: var(--track);
+    border-radius: 9999px;
+  }
+  .price-dual-range__fill {
+    position: absolute;
+    height: 4px;
+    background: var(--fill);
+    border-radius: 9999px;
+  }
+  .price-dual-range input[type='range'] {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 32px;
+    margin: 0;
+    background: transparent;
+    pointer-events: none;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+  .price-dual-range input[type='range']::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    pointer-events: auto;
+    width: 18px;
+    height: 18px;
+    background: #ffffff;
+    border: 3px solid var(--thumb);
+    border-radius: 50%;
+    cursor: grab;
+    margin-top: -7px;
+    box-shadow: 0 2px 5px rgba(18, 17, 36, 0.18);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+  .price-dual-range input[type='range']::-webkit-slider-thumb:hover {
+    transform: scale(1.15);
+    box-shadow: 0 3px 8px rgba(72, 73, 232, 0.35);
+  }
+  .price-dual-range input[type='range']::-webkit-slider-thumb:active {
+    cursor: grabbing;
+    transform: scale(1.2);
+    box-shadow: 0 0 0 4px rgba(72, 73, 232, 0.2);
+  }
+  .price-dual-range input[type='range']::-moz-range-thumb {
+    pointer-events: auto;
+    width: 18px;
+    height: 18px;
+    background: #ffffff;
+    border: 3px solid var(--thumb);
+    border-radius: 50%;
+    cursor: grab;
+    box-shadow: 0 2px 5px rgba(18, 17, 36, 0.18);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+  .price-dual-range input[type='range']::-moz-range-thumb:hover {
+    transform: scale(1.15);
+    box-shadow: 0 3px 8px rgba(72, 73, 232, 0.35);
+  }
+  .price-dual-range input[type='range']::-moz-range-thumb:active {
+    cursor: grabbing;
+    transform: scale(1.2);
+    box-shadow: 0 0 0 4px rgba(72, 73, 232, 0.2);
+  }
+  .price-dual-range input[type='range']::-webkit-slider-runnable-track {
+    height: 4px;
+    background: transparent;
+  }
+  .price-dual-range input[type='range']::-moz-range-track {
+    height: 4px;
+    background: transparent;
+  }
+}
+
+/* Home page butterflies */
+.bf-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 45;
+  overflow: hidden;
+  pointer-events: none;
+}
+.bf {
+  position: absolute;
+  left: 0;
+  top: 0;
+  will-change: transform;
+  transition: opacity 0.4s ease;
+  filter: drop-shadow(0 6px 6px rgba(60, 20, 90, 0.35));
+}
+.bf[data-state='rest'],
+.bf[data-state='return'],
+.bf[data-state='flutter'] {
+  pointer-events: auto;
+  cursor: grab;
+  touch-action: none;
+}
+.bf[data-dragging] {
+  cursor: grabbing;
+}
+.bf-flip {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.bf-trail {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.bf-wing,
+.bf-body {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  user-select: none;
+  pointer-events: none;
+}
+.bf-body {
+  width: 100%;
+}
+.bf-wing-l {
+  transform-origin: 100% 50%;
+}
+.bf-wing-r {
+  transform-origin: 0 50%;
+}
+.bf[data-state='fly'] .bf-wing-l,
+.bf[data-state='fly'] .bf-wing-r,
+.bf[data-state='return'] .bf-wing-l,
+.bf[data-state='return'] .bf-wing-r {
+  animation-duration: 0.2s;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+}
+.bf[data-state='flutter'] .bf-wing-l,
+.bf[data-state='flutter'] .bf-wing-r {
+  animation-duration: 0.26s;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+}
+.bf[data-state='fly'] .bf-wing-l,
+.bf[data-state='return'] .bf-wing-l,
+.bf[data-state='flutter'] .bf-wing-l { animation-name: bf-flap-l; }
+.bf[data-state='fly'] .bf-wing-r,
+.bf[data-state='return'] .bf-wing-r,
+.bf[data-state='flutter'] .bf-wing-r { animation-name: bf-flap-r; }
+.bf[data-state='rest'] .bf-wing-l { animation: bf-rest-l 1.5s ease-in-out infinite; }
+.bf[data-state='rest'] .bf-wing-r { animation: bf-rest-r 1.5s ease-in-out infinite; }
+@keyframes bf-flap-l {
+  from { transform: perspective(520px) rotateY(8deg); }
+  to { transform: perspective(520px) rotateY(-68deg); }
+}
+@keyframes bf-flap-r {
+  from { transform: perspective(520px) rotateY(-8deg); }
+  to { transform: perspective(520px) rotateY(68deg); }
+}
+@keyframes bf-rest-l {
+  0%, 100% { transform: perspective(700px) rotateY(0deg); }
+  50% { transform: perspective(700px) rotateY(-32deg); }
+}
+@keyframes bf-rest-r {
+  0%, 100% { transform: perspective(700px) rotateY(0deg); }
+  50% { transform: perspective(700px) rotateY(32deg); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .bf-wing { animation: none !important; }
+}
+
+/* ---------------------------------------------------------------------------
+   Phone readability: the design uses many 9–12px text sizes, which look tiny on
+   small / high-density phones. Below the `sm` breakpoint raise those sizes.
+   `~=` matches the exact class token only, so `sm:text-[11px]` etc. are untouched.
+   --------------------------------------------------------------------------- */
+@media (max-width: 639px) {
+  body { font-size: 14px; }
+  [class~="text-[9px]"],
+  [class~="text-[9.5px]"],
+  [class~="text-[10px]"],
+  [class~="text-[10.5px]"] { font-size: 12px; }
+  [class~="text-[11px]"],
+  [class~="text-[11.5px]"] { font-size: 13px; }
+  [class~="text-[12px]"],
+  [class~="text-[12.5px]"] { font-size: 14px; }
+  .btn-ink, .btn-outline { font-size: 12px; padding-top: 0.6rem; padding-bottom: 0.6rem; }
+  .label-caps { font-size: 12px; }
+}
