@@ -6,6 +6,7 @@ import { siteSettings, storefrontContent } from '../store/selectors.js'
 import { Instagram } from './icons'
 
 function NewsletterForm() {
+  const { t } = useLanguage()
   const [email, setEmail] = useState('')
   const [done, setDone] = useState(false)
 
@@ -19,7 +20,7 @@ function NewsletterForm() {
     return (
       <div className="inline-flex items-center gap-2 rounded bg-emerald-50 px-4 py-2 text-emerald-800 border border-emerald-200">
         <span className="text-xs font-bold">✓</span>
-        <p className="text-xs font-medium">Subscribed! Check your inbox for exclusive deals.</p>
+        <p className="text-xs font-medium">{t('subscribedMsg')}</p>
       </div>
     )
   }
@@ -34,7 +35,7 @@ function NewsletterForm() {
         required
         value={email}
         onChange={(e) => setEmail(e.target.value)}
-        placeholder="Enter your email for Amazon deals..."
+        placeholder={t('emailPlaceholder')}
         aria-label="Email address for newsletter"
         className="min-w-0 flex-1 px-3 py-2 text-xs text-slate-800 placeholder:text-slate-400 outline-none"
       />
@@ -42,7 +43,7 @@ function NewsletterForm() {
         type="submit"
         className="shrink-0 bg-[#1D4ED8] px-4 py-2 text-xs font-bold text-white transition-colors hover:bg-[#1E40AF]"
       >
-        Subscribe
+        {t('subscribe')}
       </button>
     </form>
   )
@@ -69,47 +70,47 @@ export default function Footer({ onOpenCatalogue }) {
         onClick={scrollToTop}
         className="w-full bg-[#133E87] py-3 text-center text-xs font-bold text-white transition-colors hover:bg-[#1E40AF]"
       >
-        ▲ Back to top
+        {t('backToTop')}
       </button>
 
       {/* 2. Royal Blue Footer Navigation Grid (#0B2545) */}
       <div className="bg-[#0B2545] text-white">
         <div className="container grid grid-cols-2 gap-8 px-4 py-10 sm:grid-cols-4 sm:px-6">
           <div>
-            <h4 className="font-bold text-xs uppercase tracking-wider text-white">Get to Know Us</h4>
+            <h4 className="font-bold text-xs uppercase tracking-wider text-white">{t('getToKnowUs')}</h4>
             <ul className="mt-3 space-y-2 text-xs text-slate-300">
-              <li><Link to="/pages/about-us" className="hover:underline">About Online Gulf Uniform</Link></li>
-              <li><Link to="/collections/boys" className="hover:underline">Boys School Uniforms</Link></li>
-              <li><Link to="/collections/girls" className="hover:underline">Girls School Uniforms</Link></li>
-              <li><Link to="/collections/industrial-uniforms" className="hover:underline">Industrial Safety Workwear</Link></li>
+              <li><Link to="/pages/about-us" className="hover:underline">{t('aboutOGU')}</Link></li>
+              <li><Link to="/collections/boys" className="hover:underline">{t('boysSection')}</Link></li>
+              <li><Link to="/collections/girls" className="hover:underline">{t('girlsSection')}</Link></li>
+              <li><Link to="/collections/industrial-uniforms" className="hover:underline">{t('industrialSection')}</Link></li>
             </ul>
           </div>
 
           <div>
-            <h4 className="font-bold text-xs uppercase tracking-wider text-white">Connect with Us</h4>
+            <h4 className="font-bold text-xs uppercase tracking-wider text-white">{t('connectWithUs')}</h4>
             <ul className="mt-3 space-y-2 text-xs text-slate-300">
               <li><a href={site.instagram || '#'} target="_blank" rel="noreferrer" className="hover:underline">Instagram</a></li>
-              <li><a href="https://wa.me/918546063989" target="_blank" rel="noreferrer" className="hover:underline">WhatsApp Direct</a></li>
-              <li><Link to="/policies/contact-information" className="hover:underline">Contact Support</Link></li>
+              <li><a href="https://wa.me/918546063989" target="_blank" rel="noreferrer" className="hover:underline">{t('whatsappDirect')}</a></li>
+              <li><Link to="/policies/contact-information" className="hover:underline">{t('contactSupport')}</Link></li>
             </ul>
           </div>
 
           <div>
-            <h4 className="font-bold text-xs uppercase tracking-wider text-white">Make Money with Us</h4>
+            <h4 className="font-bold text-xs uppercase tracking-wider text-white">{t('makeMoneyWithUs')}</h4>
             <ul className="mt-3 space-y-2 text-xs text-slate-300">
-              <li><Link to="/#b2b-quote" className="hover:underline text-[#FBBF24]">Bulk & Corporate Supply</Link></li>
-              <li><Link to="/pages/work-with-us" className="hover:underline">Wholesale Partnerships</Link></li>
-              <li><Link to="/admin/login" className="hover:underline">Seller / Admin Portal</Link></li>
+              <li><Link to="/#b2b-quote" className="hover:underline text-[#FBBF24]">{t('bulkCorporateSupply')}</Link></li>
+              <li><Link to="/pages/work-with-us" className="hover:underline">{t('wholesalePartners')}</Link></li>
+              <li><Link to="/admin/login" className="hover:underline">{t('adminPortal')}</Link></li>
             </ul>
           </div>
 
           <div>
-            <h4 className="font-bold text-xs uppercase tracking-wider text-white">Let Us Help You</h4>
+            <h4 className="font-bold text-xs uppercase tracking-wider text-white">{t('letUsHelpYou')}</h4>
             <ul className="mt-3 space-y-2 text-xs text-slate-300">
-              <li><Link to="/account" className="hover:underline">Your Account</Link></li>
-              <li><Link to="/track" className="hover:underline">Track Your Orders</Link></li>
-              <li><Link to="/policies/shipping-policy" className="hover:underline">Shipping Rates & Policies</Link></li>
-              <li><Link to="/policies/refund-policy" className="hover:underline">Returns & Replacements</Link></li>
+              <li><Link to="/account" className="hover:underline">{t('yourAccount')}</Link></li>
+              <li><Link to="/track" className="hover:underline">{t('trackYourOrders')}</Link></li>
+              <li><Link to="/policies/shipping-policy" className="hover:underline">{t('shippingRates')}</Link></li>
+              <li><Link to="/policies/refund-policy" className="hover:underline">{t('returnsReplacements')}</Link></li>
             </ul>
           </div>
         </div>

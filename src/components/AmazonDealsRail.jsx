@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { useCart } from '../context/CartContext'
+import { inr, useCart } from '../context/CartContext'
 import { useLanguage } from '../context/LanguageContext'
 
 /* Palette: white #FFFFFF · navy #0B2545 · royal blue #1D4ED8 · deep blue #1E40AF · tint #EFF4FF */
@@ -150,11 +150,11 @@ export default function AmazonDealsRail({
 
                     <div className="mt-2 flex items-baseline gap-2">
                       <span className="font-serif text-xl font-semibold text-[#0B2545]">
-                        ₹{product.price}
+                        {inr(product.price)}
                       </span>
                       {hasDiscount && (
                         <span className="text-xs text-[#0B2545]/45 line-through">
-                          ₹{product.compareAt}
+                          {inr(product.compareAt)}
                         </span>
                       )}
                     </div>

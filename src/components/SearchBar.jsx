@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { applyQuery } from '../lib/filters'
 import { inr } from '../context/CartContext'
 import { useStore } from '../store/StoreContext.jsx'
@@ -19,10 +19,12 @@ import Img from './Img'
 export default function SearchBar({
   value,
   onQueryChange,
-  placeholder = 'Search vanilla, rose, soy wax, gifts…',
+  onSearch,
+  placeholder = 'Search uniforms, pants, shirts, PE, safety…',
   resultCount,
   className = '',
 }) {
+  const navigate = useNavigate()
   const { state } = useStore()
   const catalogue = allProducts(state)
   const controlled = typeof onQueryChange === 'function'
@@ -46,10 +48,33 @@ export default function SearchBar({
     return () => document.removeEventListener('mousedown', onDown)
   }, [])
 
+  const handleSubmit = (e) => {
+    e?.preventDefault?.()
+    setFocused(false)
+    if (typeof onSearch === 'function') {
+      onSearch(q)
+      return
+    }
+    if (!controlled && q.trim()) {
+      navigate(`/collections/all-products?q=${encodeURIComponent(q.trim())}`)
+    }
+  }
+
   return (
     <div ref={box} className={`relative w-full ${className}`}>
-      <div className="flex w-full items-center gap-2.5 rounded-lg border border-line bg-white px-3 py-2 transition-colors focus-within:border-brand sm:gap-3 sm:px-4 sm:py-2.5 md:px-5 md:py-3">
-        <Search className="h-4 w-4 shrink-0 text-muted sm:h-[18px] sm:w-[18px]" />
+      <form
+        onSubmit={handleSubmit}
+        role="search"
+        className="flex w-full items-center gap-2 rounded-lg border border-line bg-white px-3 py-1.5 transition-colors focus-within:border-[#1D4ED8] focus-within:ring-1 focus-within:ring-[#1D4ED8] sm:gap-2.5 sm:px-4 sm:py-2"
+      >
+        <button
+          type="submit"
+          aria-label="Search"
+          className="shrink-0 text-muted transition-colors hover:text-[#1D4ED8] focus:outline-none"
+        >
+          <Search className="h-4 w-4 sm:h-[18px] sm:w-[18px]" />
+        </button>
+
         <input
           value={q}
           onChange={(e) => setQ(e.target.value)}
@@ -59,8 +84,10 @@ export default function SearchBar({
           aria-label="Search products"
           className="w-full bg-transparent text-[12px] outline-none placeholder:text-muted sm:text-[13px] md:text-sm"
         />
+
         {q && (
           <button
+            type="button"
             onClick={() => setQ('')}
             aria-label="Clear search"
             className="shrink-0 text-muted transition-colors hover:text-ink"
@@ -68,7 +95,14 @@ export default function SearchBar({
             <Close className="h-4 w-4" />
           </button>
         )}
-      </div>
+
+        <button
+          type="submit"
+          className="shrink-0 rounded-md bg-[#1D4ED8] px-3.5 py-1.5 text-xs font-bold text-white shadow-xs transition hover:bg-[#1E40AF] active:scale-95"
+        >
+          Search
+        </button>
+      </form>
 
       {/* inline result count for the controlled/grid mode */}
       {controlled && q.trim() && (

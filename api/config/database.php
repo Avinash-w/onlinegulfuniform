@@ -1,4 +1,3 @@
-
 <?php
 
 function app_config(): array
@@ -28,27 +27,55 @@ function db(): PDO
 
     $c = app_config();
 
-    $dsn = sprintf(
-        'mysql:host=%s;port=%s;dbname=%s;charset=%s',
-        $c['db_host'],
-        $c['db_port'],
-        $c['db_name'],
-        $c['db_charset']
-    );
+    // 1. Try configured database credentials
+    try {
+        $dsn = sprintf(
+            'mysql:host=%s;port=%s;dbname=%s;charset=%s',
+            $c['db_host'],
+            $c['db_port'],
+            $c['db_name'],
+            $c['db_charset'] ?? 'utf8mb4'
+        );
 
-    $pdo = new PDO(
-        $dsn,
-        $c['db_user'],
-        $c['db_pass'],
-        [
-            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-            PDO::ATTR_EMULATE_PREPARES => false,
-            PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => true,
-        ]
-    );
+        $pdo = new PDO(
+            $dsn,
+            $c['db_user'],
+            $c['db_pass'],
+            [
+                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+                PDO::ATTR_EMULATE_PREPARES => false,
+                PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => true,
+                PDO::ATTR_TIMEOUT => 3,
+            ]
+        );
 
-    return $pdo;
+        return $pdo;
+    } catch (Throwable $e) {
+        // If remote database failed (e.g. Hostinger IP not whitelisted for local dev),
+        // gracefully fall back to local XAMPP MySQL (evaranest)
+        if ($c['db_host'] !== '127.0.0.1' && $c['db_host'] !== 'localhost') {
+            try {
+                $localDsn = 'mysql:host=127.0.0.1;port=3306;dbname=evaranest;charset=utf8mb4';
+                $pdo = new PDO(
+                    $localDsn,
+                    'root',
+                    '',
+                    [
+                        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+                        PDO::ATTR_EMULATE_PREPARES => false,
+                        PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => true,
+                    ]
+                );
+                return $pdo;
+            } catch (Throwable $localErr) {
+                // rethrow original exception if local also fails
+                throw $e;
+            }
+        }
+        throw $e;
+    }
 }
 
 function ensure_soft_delete_columns(PDO $pdo): void

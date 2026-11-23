@@ -9,6 +9,7 @@ import {
 import { mergeContentDefaults } from './contentSeed.js'
 import { reducer } from './reducer.js'
 import { ADMIN_ROLES, DEMO_ADMIN_PASSWORD, buildSeed } from './seed.js'
+import { products as localCatalogue } from '../data/products.js'
 
 const StoreContext = createContext(null)
 
@@ -37,7 +38,9 @@ function getInitialState() {
     ...seed,
     content: mergeContentDefaults(seed.content),
     catalogReady: false,
-    catalogue: seed.catalogue || [],
+    // Keep the storefront usable on a local Vite-only run when the PHP API is
+    // not available. A successful API bootstrap replaces this catalogue.
+    catalogue: seed.catalogue?.length ? seed.catalogue : localCatalogue,
     variants: seed.variants || [],
     categories: seed.categories || [],
     coupons: seed.coupons || [],
@@ -224,8 +227,13 @@ export function useStore() {
   return ctx
 }
 
-export const inr = (n) =>
-  `₹${Number(n ?? 0).toLocaleString('en-IN', { maximumFractionDigits: 0 })}`
+export const aed = (n, lang = 'en') => {
+  const val = Number(n ?? 0).toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 2 })
+  if (lang === 'ar') return `${val} د.إ`
+  return `AED ${val}`
+}
+
+export const inr = (n) => aed(n)
 
 export const shortDate = (ts) =>
   new Date(ts).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: '2-digit' })

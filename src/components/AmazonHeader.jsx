@@ -1,10 +1,12 @@
-import { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { useEffect, useRef, useState } from 'react'
+import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { useCart } from '../context/CartContext'
 import { useLanguage } from '../context/LanguageContext'
 import { useStore } from '../store/StoreContext.jsx'
 import { userById } from '../store/selectors.js'
 import { Menu, Search } from './icons'
+
+/* Palette: white #FFFFFF · navy #0B2545 · royal blue #1D4ED8 · deep blue #1E40AF · tint #EFF4FF */
 
 const BOYS_SUBS = [
   { label: 'Pants', slug: 'boys-pants' },
@@ -38,6 +40,157 @@ const INDUSTRIAL_SUBS = [
   { label: 'Oil and Gas Uniforms', slug: 'oil-and-gas-uniforms' },
 ]
 
+/* ───────── Small helpers ───────── */
+
+function Chevron({ open, className = '' }) {
+  return (
+    <svg
+      viewBox="0 0 12 12"
+      className={`h-3 w-3 transition-transform ${open ? 'rotate-180' : ''} ${className}`}
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <path d="M2.5 4.5 6 8l3.5-3.5" />
+    </svg>
+  )
+}
+
+function PinIcon({ className = 'h-4 w-4' }) {
+  return (
+    <svg viewBox="0 0 24 24" className={className} fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M12 21s7-5.6 7-11a7 7 0 1 0-14 0c0 5.4 7 11 7 11z" />
+      <circle cx="12" cy="10" r="2.5" />
+    </svg>
+  )
+}
+
+function UserIcon({ className = 'h-6 w-6' }) {
+  return (
+    <svg viewBox="0 0 24 24" className={className} fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <circle cx="12" cy="8" r="4" />
+      <path d="M4 21c0-4 3.6-7 8-7s8 3 8 7" />
+    </svg>
+  )
+}
+
+function BagIcon({ className = 'h-6 w-6' }) {
+  return (
+    <svg viewBox="0 0 24 24" className={className} fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M6 8h12l1 12H5L6 8z" />
+      <path d="M9 8V6a3 3 0 0 1 6 0v2" />
+    </svg>
+  )
+}
+
+/**
+ * Dropdown that works with mouse hover AND touch / keyboard (click toggles).
+ * Closes on outside tap or Escape.
+ */
+function Dropdown({ trigger, children, align = 'left', panelClass = '' }) {
+  const [open, setOpen] = useState(false)
+  const ref = useRef(null)
+
+  useEffect(() => {
+    if (!open) return
+    const onDown = (e) => {
+      if (ref.current && !ref.current.contains(e.target)) setOpen(false)
+    }
+    const onKey = (e) => e.key === 'Escape' && setOpen(false)
+    document.addEventListener('pointerdown', onDown)
+    document.addEventListener('keydown', onKey)
+    return () => {
+      document.removeEventListener('pointerdown', onDown)
+      document.removeEventListener('keydown', onKey)
+    }
+  }, [open])
+
+  const close = () => setOpen(false)
+
+  return (
+    <div
+      ref={ref}
+      className="relative"
+      onPointerEnter={(e) => e.pointerType === 'mouse' && setOpen(true)}
+      onPointerLeave={(e) => e.pointerType === 'mouse' && setOpen(false)}
+    >
+      {trigger({ open, toggle: () => setOpen((o) => !o), close })}
+      {open && (
+        <div
+          className={`absolute top-full z-50 pt-2 ${align === 'right' ? 'right-0' : 'left-0'}`}
+        >
+          <div
+            className={`animate-fadeIn rounded-2xl border border-[#0B2545]/10 bg-white p-3 text-[#0B2545] shadow-2xl ${panelClass}`}
+          >
+            {children({ close })}
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
+
+function CategoryMenu({ label, to, heading, subs, viewAll }) {
+  return (
+    <Dropdown
+      panelClass="w-72"
+      trigger={({ open, toggle }) => (
+        <div
+          className={`flex items-center rounded-full transition-colors ${
+            open ? 'bg-white text-[#0B2545]' : 'hover:bg-white/10'
+          }`}
+        >
+          <Link to={to} className="py-1.5 pl-3.5 pr-1 text-sm font-semibold">
+            {label}
+          </Link>
+          <button
+            type="button"
+            onClick={toggle}
+            aria-expanded={open}
+            aria-label={`${label} sub-categories`}
+            className="flex h-8 w-8 items-center justify-center rounded-full"
+          >
+            <Chevron open={open} />
+          </button>
+        </div>
+      )}
+    >
+      {({ close }) => (
+        <>
+          <p className="px-3 pb-2 text-[11px] font-bold uppercase tracking-wider text-[#0B2545]/45">
+            {heading}
+          </p>
+          <div className="max-h-[60vh] space-y-0.5 overflow-y-auto">
+            {subs.map((s) => (
+              <Link
+                key={s.slug}
+                to={`/collections/${s.slug}`}
+                onClick={close}
+                className="flex items-center justify-between rounded-lg px-3 py-2 text-sm text-[#0B2545]/80 transition-colors hover:bg-[#EFF4FF] hover:text-[#1D4ED8]"
+              >
+                {s.label}
+                <span className="text-[#0B2545]/30">›</span>
+              </Link>
+            ))}
+          </div>
+          <Link
+            to={to}
+            onClick={close}
+            className="mt-2 block rounded-lg bg-[#EFF4FF] px-3 py-2.5 text-center text-sm font-semibold text-[#1D4ED8] hover:bg-[#DBE7FF]"
+          >
+            {viewAll} →
+          </Link>
+        </>
+      )}
+    </Dropdown>
+  )
+}
+
+/* ───────── Header ───────── */
+
 export default function AmazonHeader({ onOpenAllMenu }) {
   const { count, openCart } = useCart()
   const { lang, setLang, currentLang, languages, t } = useLanguage()
@@ -45,28 +198,47 @@ export default function AmazonHeader({ onOpenAllMenu }) {
   const currentUser = userById(state, state.currentUserId)
   const isCustomer = currentUser && currentUser.role === 'Customer'
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
 
   const [searchQuery, setSearchQuery] = useState('')
   const [category, setCategory] = useState('All')
-  const [accountMenuOpen, setAccountMenuOpen] = useState(false)
-  const [langMenuOpen, setLangMenuOpen] = useState(false)
   const [deliveryPincode, setDeliveryPincode] = useState('Dubai / GCC')
   const [pincodeModal, setPincodeModal] = useState(false)
   const [newPincode, setNewPincode] = useState('')
 
-  // Flyout menu active hover state
-  const [activeDropdown, setActiveDropdown] = useState(null)
+  // Sync search input and category with URL query parameters
+  useEffect(() => {
+    const q = searchParams.get('q')
+    if (q !== null) {
+      setSearchQuery(q)
+    }
+    const cat = searchParams.get('category')
+    if (cat) {
+      setCategory(cat)
+    }
+  }, [searchParams])
+
+  useEffect(() => {
+    if (!pincodeModal) return
+    const onKey = (e) => e.key === 'Escape' && setPincodeModal(false)
+    document.addEventListener('keydown', onKey)
+    return () => document.removeEventListener('keydown', onKey)
+  }, [pincodeModal])
 
   const handleSearch = (e) => {
-    e.preventDefault()
-    if (!searchQuery.trim()) {
+    e?.preventDefault?.()
+    const trimmed = searchQuery.trim()
+    const catParam = category !== 'All' ? `&category=${encodeURIComponent(category)}` : ''
+    if (!trimmed) {
       if (category !== 'All') {
-        navigate(`/collections/${category.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`)
+        const catSlug = category.toLowerCase().replace(/[^a-z0-9]+/g, '-')
+        navigate(`/collections/${catSlug}`)
+      } else {
+        navigate('/collections/all-products')
       }
       return
     }
-    const catParam = category !== 'All' ? `&category=${encodeURIComponent(category)}` : ''
-    navigate(`/collections/all-products?q=${encodeURIComponent(searchQuery.trim())}${catParam}`)
+    navigate(`/collections/all-products?q=${encodeURIComponent(trimmed)}${catParam}`)
   }
 
   const handleUpdatePincode = (e) => {
@@ -78,437 +250,365 @@ export default function AmazonHeader({ onOpenAllMenu }) {
     }
   }
 
+  const firstName = currentUser?.name ? currentUser.name.split(' ')[0] : null
+
   return (
     <>
-      {/* 1. Main Amazon Royal Blue Header Bar (#0B2545) */}
       <header className="sticky top-0 z-40 bg-[#0B2545] text-white shadow-md">
-        <div className="flex h-[64px] items-center gap-2 px-2 sm:px-4 lg:gap-4 lg:px-6">
-          {/* Mobile Menu Button */}
+        {/* ── Main bar ──
+            Mobile: [menu] [logo] ········ [lang] [account] [cart]
+                    [ ───────── search ───────── ]
+            Tablet/Desktop: single row with search in the middle            */}
+        <div className="flex flex-wrap items-center gap-x-1.5 gap-y-2.5 px-3 py-2.5 sm:px-4 md:flex-nowrap md:gap-x-3 lg:gap-x-4 lg:px-6">
+          {/* Menu (mobile only) */}
           <button
             onClick={onOpenAllMenu}
-            className="flex items-center gap-1 rounded p-1 text-white hover:ring-1 hover:ring-white md:hidden"
-            aria-label="Open mobile menu"
+            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-white transition hover:bg-white/10 max-[380px]:h-9 max-[380px]:w-8 md:hidden"
+            aria-label="Open menu"
           >
             <Menu className="h-6 w-6" />
           </button>
 
-          {/* Official Online Gulf Uniform Logo */}
+          {/* Logo */}
           <Link
             to="/"
-            className="flex shrink-0 items-center rounded-md bg-white px-2.5 py-1 shadow-sm transition-all hover:ring-2 hover:ring-[#FBBF24]"
+            className="flex shrink-0 items-center rounded-lg bg-white px-2.5 py-1 shadow-sm transition hover:ring-2 hover:ring-[#93C5FD] max-[380px]:px-1.5"
             aria-label="Online Gulf Uniform — Home"
           >
             <img
               src="/logo/online-gulf-uniform-logo.jpg"
               alt="Online Gulf Uniform"
-              className="h-8 sm:h-9 md:h-10 w-auto object-contain"
+              className="h-8 w-auto object-contain sm:h-9 lg:h-10 max-[380px]:max-w-[88px]"
               width={180}
               height={40}
             />
           </Link>
 
-          {/* Deliver to Location selector (Desktop) */}
+          {/* Deliver to (desktop) */}
           <button
             type="button"
             onClick={() => setPincodeModal(true)}
-            className="hidden items-center gap-1.5 rounded px-2.5 py-1 text-left transition-all hover:ring-1 hover:ring-white lg:flex"
+            className="hidden shrink-0 items-center gap-2 rounded-lg px-2.5 py-1.5 text-left transition hover:bg-white/10 lg:flex"
           >
-            <span className="text-lg text-white">📍</span>
-            <div className="flex flex-col leading-tight">
-              <span className="text-[11px] text-slate-300">{t('deliverTo')}</span>
-              <span className="text-xs font-bold text-white">{deliveryPincode}</span>
-            </div>
+            <PinIcon className="h-5 w-5 text-[#93C5FD]" />
+            <span className="flex flex-col leading-tight">
+              <span className="text-[11px] text-white/60">{t('deliverTo')}</span>
+              <span className="max-w-[110px] truncate text-xs font-bold">{deliveryPincode}</span>
+            </span>
           </button>
 
-          {/* Wide Amazon Search Bar with Royal Blue search button */}
+          {/* Spacer pushes icons right on mobile */}
+          <div className="min-w-0 flex-1 md:hidden" />
+
+          {/* Search — full-width 2nd row on mobile, inline from md up */}
           <form
             onSubmit={handleSearch}
-            className="flex h-10 flex-1 items-center overflow-hidden rounded-md bg-white shadow-inner focus-within:ring-2 focus-within:ring-[#3B82F6]"
+            role="search"
+            className="order-last flex h-11 w-full min-w-0 items-center overflow-hidden rounded-full bg-white shadow-inner focus-within:ring-2 focus-within:ring-[#93C5FD] md:order-none md:w-auto md:flex-1"
           >
-            {/* Category Dropdown */}
-            <div className="relative hidden bg-[#F1F5F9] text-xs text-slate-800 hover:bg-[#E2E8F0] sm:block border-r border-slate-300">
+            <div className="relative hidden h-full shrink-0 border-r border-[#0B2545]/10 bg-[#EFF4FF] sm:block md:hidden lg:block">
+              <label htmlFor="header-category" className="sr-only">
+                {t('allCategories')}
+              </label>
               <select
+                id="header-category"
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
-                className="h-10 cursor-pointer appearance-none bg-transparent pl-3 pr-7 text-xs font-medium text-slate-800 focus:outline-none"
+                className="h-full max-w-[150px] cursor-pointer appearance-none bg-transparent pl-4 pr-8 text-xs font-semibold text-[#0B2545] focus:outline-none"
               >
                 <option value="All">{t('allCategories')}</option>
-                <option value="Boys">Boys Uniforms</option>
-                <option value="Girls">Girls Uniforms</option>
-                <option value="Industrial Uniforms">Industrial Uniforms</option>
-                <option value="School">School Uniforms</option>
-                <option value="Corporate">Corporate Uniforms</option>
+                <option value="Boys">{t('boys')}</option>
+                <option value="Girls">{t('girls')}</option>
+                <option value="Industrial Uniforms">{t('industrialUniforms')}</option>
+                <option value="School">{t('schoolUniforms')}</option>
+                <option value="Corporate">{t('corporateUniforms')}</option>
                 <option value="Safety">Safety & Oil/Gas</option>
               </select>
-              <span className="pointer-events-none absolute right-2.5 top-3.5 text-[9px] text-slate-600">
-                ▼
-              </span>
+              <Chevron open={false} className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[#0B2545]/60" />
             </div>
 
-            {/* Input box */}
             <input
-              type="text"
+              type="search"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder={t('searchPlaceholder')}
-              className="h-full min-w-0 flex-1 px-3 text-sm text-slate-900 placeholder:text-slate-500 focus:outline-none"
+              aria-label={t('searchPlaceholder')}
+              className="h-full min-w-0 flex-1 bg-transparent px-4 text-base text-[#0B2545] placeholder:text-[#0B2545]/45 focus:outline-none sm:text-sm"
             />
 
-            {/* Royal Blue Search Button */}
             <button
               type="submit"
-              className="flex h-full w-12 shrink-0 items-center justify-center bg-[#1D4ED8] transition-colors hover:bg-[#1E40AF] active:bg-[#1E3A8A]"
+              onClick={handleSearch}
+              className="m-1 flex h-9 w-11 shrink-0 items-center justify-center rounded-full bg-[#1D4ED8] text-white transition hover:bg-[#1E40AF] active:scale-95"
               aria-label="Submit Search"
             >
-              <Search className="h-5 w-5 text-white stroke-[2.4]" />
+              <Search className="h-5 w-5 stroke-[2.4]" />
             </button>
           </form>
 
-          {/* 3-Language Selector Dropdown (English, Arabic, Malayalam) */}
-          <div
-            className="relative"
-            onMouseEnter={() => setLangMenuOpen(true)}
-            onMouseLeave={() => setLangMenuOpen(false)}
+          {/* Language */}
+          <Dropdown
+            align="right"
+            panelClass="w-56"
+            trigger={({ open, toggle }) => (
+              <button
+                type="button"
+                onClick={toggle}
+                aria-expanded={open}
+                aria-label="Change language"
+                className="flex h-10 items-center gap-1 rounded-full px-2.5 text-xs font-bold transition hover:bg-white/10 max-[380px]:h-9 max-[380px]:px-1"
+              >
+                <span className="text-base leading-none">{currentLang.flag}</span>
+                <span className="hidden uppercase sm:inline">{currentLang.code}</span>
+                <Chevron open={open} className="hidden text-white/60 sm:block" />
+              </button>
+            )}
           >
-            <button
-              type="button"
-              className="flex items-center gap-1.5 rounded px-2 py-1 text-xs font-bold transition-all hover:ring-1 hover:ring-white"
-            >
-              <span className="text-base">{currentLang.flag}</span>
-              <span className="uppercase text-white">{currentLang.code}</span>
-              <span className="text-[9px] text-slate-300">▼</span>
-            </button>
-
-            {/* Dropdown Menu */}
-            {langMenuOpen && (
-              <div className="absolute right-0 top-full z-50 w-52 animate-fadeIn rounded-md border border-slate-200 bg-white p-3 text-slate-900 shadow-2xl">
-                <div className="border-b border-slate-100 pb-2 text-[11px] font-bold text-slate-500 uppercase tracking-wider">
-                  Language Settings
-                </div>
-                <div className="mt-2 space-y-1">
+            {({ close }) => (
+              <>
+                <p className="px-2 pb-2 text-[11px] font-bold uppercase tracking-wider text-[#0B2545]/45">
+                  {t('selectLanguage')}
+                </p>
+                <div className="space-y-1">
                   {languages.map((l) => (
                     <button
                       key={l.code}
                       onClick={() => {
                         setLang(l.code)
-                        setLangMenuOpen(false)
+                        close()
                       }}
-                      className={`flex w-full items-center justify-between rounded px-2.5 py-2 text-xs font-medium transition-colors ${
+                      className={`flex w-full items-center justify-between rounded-lg px-3 py-2.5 text-sm transition-colors ${
                         lang === l.code
-                          ? 'bg-[#1D4ED8] text-white font-bold'
-                          : 'text-slate-700 hover:bg-slate-100'
+                          ? 'bg-[#1D4ED8] font-bold text-white'
+                          : 'text-[#0B2545]/80 hover:bg-[#EFF4FF]'
                       }`}
                     >
                       <span className="flex items-center gap-2">
                         <span>{l.flag}</span>
                         <span>{l.native}</span>
                       </span>
-                      <span className="text-[11px] opacity-75">{l.label}</span>
+                      <span className="text-xs opacity-70">{l.label}</span>
                     </button>
                   ))}
                 </div>
-              </div>
+              </>
             )}
-          </div>
+          </Dropdown>
 
-          {/* Hello, Sign in / Account & Lists */}
-          <div
-            className="relative"
-            onMouseEnter={() => setAccountMenuOpen(true)}
-            onMouseLeave={() => setAccountMenuOpen(false)}
+          {/* Account */}
+          <Dropdown
+            align="right"
+            panelClass="w-72"
+            trigger={({ open, toggle }) => (
+              <button
+                type="button"
+                onClick={toggle}
+                aria-expanded={open}
+                aria-label={t('accountAndLists')}
+                className="flex h-10 items-center gap-2 rounded-full px-2.5 transition hover:bg-white/10 max-[380px]:h-9 max-[380px]:gap-1 max-[380px]:px-1"
+              >
+                <UserIcon className="h-6 w-6 max-[380px]:h-5 max-[380px]:w-5" />
+                <span className="hidden flex-col text-left leading-tight lg:flex">
+                  <span className="text-[11px] text-white/60">
+                    {firstName ? `Hello, ${firstName}` : t('helloSignIn')}
+                  </span>
+                  <span className="flex items-center gap-1 text-xs font-bold">
+                    {t('accountAndLists')}
+                    <Chevron open={open} />
+                  </span>
+                </span>
+              </button>
+            )}
           >
-            <Link
-              to={isCustomer ? '/account' : '/login'}
-              className="flex flex-col rounded px-2 py-1 leading-tight transition-all hover:ring-1 hover:ring-white"
-            >
-              <span className="text-[11px] text-slate-300">
-                {currentUser?.name ? `Hello, ${currentUser.name.split(' ')[0]}` : t('helloSignIn')}
-              </span>
-              <span className="flex items-center gap-1 text-xs font-bold text-white">
-                <span>{t('accountAndLists')}</span>
-                <span className="text-[9px]">▼</span>
-              </span>
-            </Link>
-
-            {accountMenuOpen && (
-              <div className="absolute right-0 top-full z-50 w-64 animate-fadeIn rounded-md border border-slate-200 bg-white p-4 text-slate-900 shadow-2xl">
+            {({ close }) => (
+              <>
                 {!currentUser && (
-                  <div className="border-b border-slate-200 pb-3 text-center">
+                  <div className="border-b border-[#0B2545]/10 pb-3 text-center">
                     <Link
                       to="/login"
-                      className="block w-full rounded-md bg-[#1D4ED8] py-2 text-xs font-bold text-white shadow-sm hover:bg-[#1E40AF]"
+                      onClick={close}
+                      className="block w-full rounded-full bg-[#1D4ED8] py-2.5 text-sm font-semibold text-white hover:bg-[#1E40AF]"
                     >
                       {t('signIn')}
                     </Link>
-                    <p className="mt-1.5 text-[11px] text-slate-600">
+                    <p className="mt-2 text-xs text-[#0B2545]/60">
                       {t('newCustomer')}{' '}
-                      <Link to="/login" className="text-[#1D4ED8] font-semibold hover:underline">
+                      <Link to="/login" onClick={close} className="font-semibold text-[#1D4ED8] hover:underline">
                         {t('startHere')}
                       </Link>
                     </p>
                   </div>
                 )}
-                <div className="mt-3 grid grid-cols-2 gap-4 text-xs">
+                <div className="grid grid-cols-2 gap-4 pt-3 text-sm">
                   <div>
-                    <h4 className="font-bold text-slate-900">{t('yourLists')}</h4>
-                    <ul className="mt-1.5 space-y-1.5 text-slate-600">
-                      <li><Link to="/wishlist" className="hover:text-[#1D4ED8]">{t('wishList')}</Link></li>
-                      <li><Link to="/collections/all-products" className="hover:text-[#1D4ED8]">Uniform Catalog</Link></li>
+                    <h4 className="font-bold">{t('yourLists')}</h4>
+                    <ul className="mt-2 space-y-2 text-[#0B2545]/70">
+                      <li><Link onClick={close} to="/wishlist" className="hover:text-[#1D4ED8]">{t('wishList')}</Link></li>
+                      <li><Link onClick={close} to="/collections/all-products" className="hover:text-[#1D4ED8]">{t('uniformCatalog')}</Link></li>
                     </ul>
                   </div>
                   <div>
-                    <h4 className="font-bold text-slate-900">{t('yourAccount')}</h4>
-                    <ul className="mt-1.5 space-y-1.5 text-slate-600">
-                      <li><Link to="/account" className="hover:text-[#1D4ED8]">{t('yourAccount')}</Link></li>
-                      <li><Link to="/track" className="hover:text-[#1D4ED8]">{t('returnsAndOrders')}</Link></li>
+                    <h4 className="font-bold">{t('yourAccount')}</h4>
+                    <ul className="mt-2 space-y-2 text-[#0B2545]/70">
+                      <li><Link onClick={close} to={isCustomer ? '/account' : '/login'} className="hover:text-[#1D4ED8]">{t('yourAccount')}</Link></li>
+                      <li><Link onClick={close} to="/track" className="hover:text-[#1D4ED8]">{t('returnsAndOrders')}</Link></li>
                     </ul>
                   </div>
                 </div>
-              </div>
+              </>
             )}
-          </div>
+          </Dropdown>
 
-          {/* Returns & Orders */}
+          {/* Returns & Orders (large screens only) */}
           <Link
             to="/track"
-            className="hidden flex-col rounded px-2.5 py-1 leading-tight transition-all hover:ring-1 hover:ring-white sm:flex"
+            className="hidden flex-col rounded-lg px-2.5 py-1 leading-tight transition hover:bg-white/10 xl:flex"
           >
-            <span className="text-[11px] text-slate-300">Returns</span>
-            <span className="text-xs font-bold text-white">& Orders</span>
+            <span className="text-[11px] text-white/60">{t('returns')}</span>
+            <span className="text-xs font-bold">{t('andOrders')}</span>
           </Link>
 
-          {/* Amazon Cart */}
+          {/* Cart */}
           <button
             onClick={openCart}
-            className="flex items-center gap-1.5 rounded px-2.5 py-1 transition-all hover:ring-1 hover:ring-white"
-            aria-label="Cart"
+            className="flex h-10 items-center gap-2 rounded-full px-2.5 transition hover:bg-white/10 max-[380px]:h-9 max-[380px]:gap-1 max-[380px]:px-1"
+            aria-label={`Cart, ${count} items`}
           >
-            <div className="relative flex items-center">
-              <svg viewBox="0 0 24 24" className="h-8 w-8 fill-none stroke-white stroke-[1.8]">
-                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
-                <circle cx="9" cy="20" r="1.5" className="fill-white" />
-                <circle cx="18" cy="20" r="1.5" className="fill-white" />
-              </svg>
-              <span className="absolute left-[13px] top-[1px] text-xs font-black text-[#FBBF24]">
-                {count}
-              </span>
-            </div>
-            <span className="hidden text-xs font-bold text-white sm:inline">{t('cart')}</span>
+            <span className="relative">
+              <BagIcon className="h-6 w-6 sm:h-7 sm:w-7" />
+              {count > 0 && (
+                <span className="absolute -right-2 -top-2 flex h-5 min-w-[20px] items-center justify-center rounded-full bg-white px-1 text-[11px] font-bold text-[#1D4ED8]">
+                  {count}
+                </span>
+              )}
+            </span>
+            <span className="hidden text-sm font-semibold lg:inline">{t('cart')}</span>
           </button>
         </div>
 
-        {/* 2. Amazon Sub-Navigation Strip (Royal Navy #133E87) */}
-        {/* EXACT USER MENU: Home, About Us, Boys, Girls, Industrial uniforms, Track Order, Contact Us */}
-        <div className="relative flex h-10 items-center justify-between overflow-x-visible bg-[#133E87] px-2 text-xs font-medium text-white sm:px-4">
-          <div className="flex items-center gap-1 sm:gap-2">
-            {/* All Drawer Button */}
+        {/* ── Category nav (tablet + desktop) ── */}
+        <nav
+          aria-label="Main"
+          className="hidden items-center justify-between border-t border-white/10 bg-[#133E87] px-3 py-1.5 text-white md:flex lg:px-6"
+        >
+          <div className="flex items-center gap-0.5 lg:gap-1">
             <button
               onClick={onOpenAllMenu}
-              className="flex items-center gap-1.5 rounded px-2.5 py-1 font-bold transition-all hover:bg-white/10"
+              className="flex items-center gap-2 rounded-full px-3.5 py-1.5 text-sm font-bold transition hover:bg-white/10"
             >
               <Menu className="h-4 w-4" />
-              <span>{t('all')}</span>
+              {t('all')}
             </button>
 
-            {/* 1. Home */}
-            <Link
-              to="/"
-              className="rounded px-2.5 py-1 hover:bg-white/10 hover:text-[#FBBF24] transition-colors font-semibold"
-            >
+            <Link to="/" className="rounded-full px-3.5 py-1.5 text-sm font-semibold transition hover:bg-white/10">
               {t('home')}
             </Link>
-
-            {/* 2. About Us */}
-            <Link
-              to="/pages/about-us"
-              className="rounded px-2.5 py-1 hover:bg-white/10 hover:text-[#FBBF24] transition-colors"
-            >
+            <Link to="/pages/about-us" className="rounded-full px-3.5 py-1.5 text-sm font-semibold transition hover:bg-white/10">
               {t('aboutUs')}
             </Link>
 
-            {/* 3. Boys (with Dropdown) */}
-            <div
-              className="relative"
-              onMouseEnter={() => setActiveDropdown('boys')}
-              onMouseLeave={() => setActiveDropdown(null)}
-            >
-              <Link
-                to="/collections/boys"
-                className={`flex items-center gap-1 rounded px-2.5 py-1 transition-colors ${
-                  activeDropdown === 'boys' ? 'bg-white text-[#0B2545] font-bold' : 'hover:bg-white/10 hover:text-[#FBBF24]'
-                }`}
-              >
-                <span>{t('boys')}</span>
-                <span className="text-[9px] opacity-70">▼</span>
-              </Link>
+            <CategoryMenu
+              label={t('boys')}
+              to="/collections/boys"
+              heading={t('boysSubcatHeading')}
+              subs={BOYS_SUBS}
+              viewAll={t('viewAllBoys')}
+            />
+            <CategoryMenu
+              label={t('girls')}
+              to="/collections/girls"
+              heading={t('girlsSubcatHeading')}
+              subs={GIRLS_SUBS}
+              viewAll={t('viewAllGirls')}
+            />
+            <CategoryMenu
+              label={t('industrialUniforms')}
+              to="/collections/industrial-uniforms"
+              heading={t('industrialSubcatHeading')}
+              subs={INDUSTRIAL_SUBS}
+              viewAll={t('viewAllIndustrial')}
+            />
 
-              {activeDropdown === 'boys' && (
-                <div className="absolute left-0 top-full z-50 w-64 animate-fadeIn rounded-b-md border-t-2 border-[#1D4ED8] bg-white p-2 text-slate-900 shadow-2xl">
-                  <div className="px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-slate-400 border-b border-slate-100">
-                    Boys Uniform Subcategories
-                  </div>
-                  <div className="mt-1 space-y-0.5">
-                    {BOYS_SUBS.map((s) => (
-                      <Link
-                        key={s.slug}
-                        to={`/collections/${s.slug}`}
-                        onClick={() => setActiveDropdown(null)}
-                        className="flex items-center justify-between rounded px-3 py-1.5 text-xs text-slate-700 hover:bg-[#EFF6FF] hover:text-[#1D4ED8] transition-colors"
-                      >
-                        <span>{s.label}</span>
-                        <span className="text-[10px] text-slate-400">›</span>
-                      </Link>
-                    ))}
-                  </div>
-                  <div className="mt-2 border-t border-slate-100 pt-1.5 px-3">
-                    <Link
-                      to="/collections/boys"
-                      onClick={() => setActiveDropdown(null)}
-                      className="text-xs font-bold text-[#1D4ED8] hover:underline"
-                    >
-                      View All Boys Uniforms →
-                    </Link>
-                  </div>
-                </div>
-              )}
-            </div>
-
-            {/* 4. Girls (with Dropdown) */}
-            <div
-              className="relative"
-              onMouseEnter={() => setActiveDropdown('girls')}
-              onMouseLeave={() => setActiveDropdown(null)}
-            >
-              <Link
-                to="/collections/girls"
-                className={`flex items-center gap-1 rounded px-2.5 py-1 transition-colors ${
-                  activeDropdown === 'girls' ? 'bg-white text-[#0B2545] font-bold' : 'hover:bg-white/10 hover:text-[#FBBF24]'
-                }`}
-              >
-                <span>{t('girls')}</span>
-                <span className="text-[9px] opacity-70">▼</span>
-              </Link>
-
-              {activeDropdown === 'girls' && (
-                <div className="absolute left-0 top-full z-50 w-64 animate-fadeIn rounded-b-md border-t-2 border-[#1D4ED8] bg-white p-2 text-slate-900 shadow-2xl">
-                  <div className="px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-slate-400 border-b border-slate-100">
-                    Girls Uniform Subcategories
-                  </div>
-                  <div className="mt-1 space-y-0.5">
-                    {GIRLS_SUBS.map((s) => (
-                      <Link
-                        key={s.slug}
-                        to={`/collections/${s.slug}`}
-                        onClick={() => setActiveDropdown(null)}
-                        className="flex items-center justify-between rounded px-3 py-1.5 text-xs text-slate-700 hover:bg-[#EFF6FF] hover:text-[#1D4ED8] transition-colors"
-                      >
-                        <span>{s.label}</span>
-                        <span className="text-[10px] text-slate-400">›</span>
-                      </Link>
-                    ))}
-                  </div>
-                  <div className="mt-2 border-t border-slate-100 pt-1.5 px-3">
-                    <Link
-                      to="/collections/girls"
-                      onClick={() => setActiveDropdown(null)}
-                      className="text-xs font-bold text-[#1D4ED8] hover:underline"
-                    >
-                      View All Girls Uniforms →
-                    </Link>
-                  </div>
-                </div>
-              )}
-            </div>
-
-            {/* 5. Industrial uniforms (with Dropdown) */}
-            <div
-              className="relative"
-              onMouseEnter={() => setActiveDropdown('industrial')}
-              onMouseLeave={() => setActiveDropdown(null)}
-            >
-              <Link
-                to="/collections/industrial-uniforms"
-                className={`flex items-center gap-1 rounded px-2.5 py-1 transition-colors ${
-                  activeDropdown === 'industrial' ? 'bg-white text-[#0B2545] font-bold' : 'hover:bg-white/10 hover:text-[#FBBF24]'
-                }`}
-              >
-                <span>{t('industrialUniforms')}</span>
-                <span className="text-[9px] opacity-70">▼</span>
-              </Link>
-
-              {activeDropdown === 'industrial' && (
-                <div className="absolute left-0 top-full z-50 w-64 animate-fadeIn rounded-b-md border-t-2 border-[#1D4ED8] bg-white p-2 text-slate-900 shadow-2xl">
-                  <div className="px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-slate-400 border-b border-slate-100">
-                    Industrial & Workwear Categories
-                  </div>
-                  <div className="mt-1 space-y-0.5">
-                    {INDUSTRIAL_SUBS.map((s) => (
-                      <Link
-                        key={s.slug}
-                        to={`/collections/${s.slug}`}
-                        onClick={() => setActiveDropdown(null)}
-                        className="flex items-center justify-between rounded px-3 py-1.5 text-xs text-slate-700 hover:bg-[#EFF6FF] hover:text-[#1D4ED8] transition-colors"
-                      >
-                        <span>{s.label}</span>
-                        <span className="text-[10px] text-slate-400">›</span>
-                      </Link>
-                    ))}
-                  </div>
-                  <div className="mt-2 border-t border-slate-100 pt-1.5 px-3">
-                    <Link
-                      to="/collections/industrial-uniforms"
-                      onClick={() => setActiveDropdown(null)}
-                      className="text-xs font-bold text-[#1D4ED8] hover:underline"
-                    >
-                      View All Industrial Uniforms →
-                    </Link>
-                  </div>
-                </div>
-              )}
-            </div>
-
-            {/* 6. Track Order */}
-            <Link
-              to="/track"
-              className="rounded px-2.5 py-1 hover:bg-white/10 hover:text-[#FBBF24] transition-colors"
-            >
+            <Link to="/track" className="rounded-full px-3.5 py-1.5 text-sm font-semibold transition hover:bg-white/10">
               {t('trackOrder')}
             </Link>
-
-            {/* 7. Contact Us */}
-            <Link
-              to="/policies/contact-information"
-              className="rounded px-2.5 py-1 hover:bg-white/10 hover:text-[#FBBF24] transition-colors"
-            >
+            <Link to="/policies/contact-information" className="rounded-full px-3.5 py-1.5 text-sm font-semibold transition hover:bg-white/10">
               {t('contactUs')}
             </Link>
           </div>
 
-          <div className="hidden items-center gap-2 pr-2 text-xs font-semibold text-[#FBBF24] xl:flex">
-            <span>{t('primeFastDelivery')}</span>
-          </div>
-        </div>
+          <span className="hidden pr-2 text-xs font-semibold text-[#BFDBFE] xl:block">
+            {t('primeFastDelivery')}
+          </span>
+        </nav>
       </header>
 
-      {/* Delivery location selector modal */}
+      {/* ── Mobile quick strip (scrolls away, not sticky) ── */}
+      <div className="bg-[#133E87] text-white md:hidden">
+        <button
+          type="button"
+          onClick={() => setPincodeModal(true)}
+          className="flex w-full items-center gap-2 border-b border-white/10 px-4 py-2.5 text-left text-xs"
+        >
+          <PinIcon className="h-4 w-4 shrink-0 text-[#93C5FD]" />
+          <span className="text-white/70">{t('deliverTo')}</span>
+          <span className="truncate font-bold">{deliveryPincode}</span>
+          <Chevron open={false} className="ml-auto shrink-0 text-white/60" />
+        </button>
+        <div className="header-chips flex gap-2 overflow-x-auto px-4 py-2.5">
+          {[
+            { to: '/collections/boys', label: t('boys') },
+            { to: '/collections/girls', label: t('girls') },
+            { to: '/collections/industrial-uniforms', label: t('industrialUniforms') },
+            { to: '/track', label: t('trackOrder') },
+            { to: '/policies/contact-information', label: t('contactUs') },
+          ].map((c) => (
+            <Link
+              key={c.to}
+              to={c.to}
+              className="shrink-0 rounded-full border border-white/25 px-4 py-1.5 text-sm font-semibold transition active:bg-white active:text-[#0B2545]"
+            >
+              {c.label}
+            </Link>
+          ))}
+        </div>
+      </div>
+
+      {/* ── Delivery location modal (bottom sheet on mobile) ── */}
       {pincodeModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
-          <div className="w-full max-w-sm rounded-lg bg-white p-5 text-slate-900 shadow-2xl">
-            <div className="flex items-center justify-between border-b pb-2">
-              <h4 className="font-bold text-base">{t('changeLocation')}</h4>
-              <button onClick={() => setPincodeModal(false)} className="text-lg">✕</button>
+        <div
+          className="fixed inset-0 z-50 flex items-end justify-center bg-[#0B2545]/60 sm:items-center sm:p-4"
+          onClick={() => setPincodeModal(false)}
+        >
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-label={t('changeLocation')}
+            onClick={(e) => e.stopPropagation()}
+            className="w-full max-w-md rounded-t-3xl bg-white p-5 text-[#0B2545] shadow-2xl sm:rounded-3xl sm:p-6"
+          >
+            <div className="flex items-center justify-between">
+              <h4 className="font-serif text-xl font-semibold">{t('changeLocation')}</h4>
+              <button
+                onClick={() => setPincodeModal(false)}
+                aria-label="Close"
+                className="flex h-9 w-9 items-center justify-center rounded-full text-lg hover:bg-[#EFF4FF]"
+              >
+                ✕
+              </button>
             </div>
-            <form onSubmit={handleUpdatePincode} className="mt-4 flex gap-2">
+            <form onSubmit={handleUpdatePincode} className="mt-4 flex flex-col gap-2 sm:flex-row">
               <input
+                autoFocus
                 type="text"
-                placeholder="City, Country or Pincode (e.g. Dubai, Abu Dhabi, Delhi)"
+                placeholder={t('locationPlaceholder')}
                 value={newPincode}
                 onChange={(e) => setNewPincode(e.target.value)}
-                className="flex-1 rounded border border-slate-300 px-3 py-1.5 text-xs text-slate-800 outline-none focus:border-[#1D4ED8]"
+                className="min-w-0 flex-1 rounded-full border border-[#0B2545]/20 px-4 py-3 text-base outline-none focus:border-[#1D4ED8] focus:ring-2 focus:ring-[#1D4ED8]/25 sm:text-sm"
               />
               <button
                 type="submit"
-                className="rounded bg-[#1D4ED8] px-4 py-1.5 text-xs font-bold text-white shadow hover:bg-[#1E40AF]"
+                className="rounded-full bg-[#1D4ED8] px-6 py-3 text-sm font-semibold text-white hover:bg-[#1E40AF]"
               >
                 {t('apply')}
               </button>
@@ -516,6 +616,11 @@ export default function AmazonHeader({ onOpenAllMenu }) {
           </div>
         </div>
       )}
+
+      <style>{`
+        .header-chips { scrollbar-width: none; -ms-overflow-style: none; }
+        .header-chips::-webkit-scrollbar { display: none; }
+      `}</style>
     </>
   )
 }

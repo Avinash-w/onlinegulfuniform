@@ -3,12 +3,10 @@
 // ---------------------------------------------------------------------------
 
 const PRICE_RANGES = {
-  'Under ₹599': (p) => p.price < 599,
-  'Under ₹699': (p) => p.price < 699,
-  '₹599 - ₹999': (p) => p.price >= 599 && p.price <= 999,
-  '₹699 - ₹999': (p) => p.price >= 699 && p.price <= 999,
-  '₹999 - ₹1499': (p) => p.price > 999 && p.price <= 1499,
-  'Above ₹1499': (p) => p.price > 1499,
+  'Under AED 599': (p) => p.price < 599,
+  'AED 599 - AED 999': (p) => p.price >= 599 && p.price <= 999,
+  'AED 999 - AED 1499': (p) => p.price > 999 && p.price <= 1499,
+  'Above AED 1499': (p) => p.price > 1499,
 }
 
 /** groupName -> (product, selectedValue) => boolean */

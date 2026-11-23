@@ -6,6 +6,7 @@ import { Modal } from '../admin/ui.jsx'
 import { inr, useCart } from '../context/CartContext'
 import { apiDelete, apiGet, apiPatch, apiPost, apiPut, getCustomerToken } from '../lib/api.js'
 import { getRazorpayKey, openRazorpayCheckout } from '../lib/razorpay.js'
+import { getStripeKey, openStripeCheckout } from '../lib/stripe.js'
 import { useStore } from '../store/StoreContext.jsx'
 import { userAddresses, userById, freeShippingAt, minOrderAmount, shippingFlat } from '../store/selectors.js'
 
@@ -35,6 +36,7 @@ export default function Checkout() {
   const user = userById(state, state.currentUserId)
   const addresses = userAddresses(user)
   const hasRazorpayKey = Boolean(getRazorpayKey())
+  const hasStripeKey = Boolean(getStripeKey())
 
   const defaultAddr = addresses.find((a) => a.isDefault) || addresses[0]
 
@@ -63,7 +65,7 @@ export default function Checkout() {
       : null
   )
   const [couponError, setCouponError] = useState('')
-  const [payMode, setPayMode] = useState('online') // online | cod
+  const [payMode, setPayMode] = useState('stripe') // stripe | razorpay | cod
   const [busy, setBusy] = useState(false)
   const [formError, setFormError] = useState('')
   const [paymentProcessing, setPaymentProcessing] = useState(null) // null | { step: 'verifying' | 'success', mode: 'online' | 'cod', txnId?: string }
@@ -541,6 +543,7 @@ export default function Checkout() {
       return
     }
 
+    // ── Cash on Delivery ──────────────────────────────────────────────────
     if (payMode === 'cod') {
       setBusy(true)
       try {
@@ -561,6 +564,44 @@ export default function Checkout() {
       return
     }
 
+    // ── Stripe payment ────────────────────────────────────────────────────
+    if (payMode === 'stripe') {
+      if (!hasStripeKey) {
+        setFormError(
+          'Add your Stripe Publishable Key in .env as VITE_STRIPE_PUBLISHABLE_KEY, then restart the dev server.'
+        )
+        return
+      }
+      setBusy(true)
+      try {
+        const stripePaymentId = await openStripeCheckout({
+          amountAed: total,
+          name: resolved.contact.name,
+          email: resolved.contact.email,
+          phone: resolved.contact.phone,
+          description: 'Online Gulf Uniform order',
+        })
+        await placeOrderApi({
+          ...resolved,
+          method: 'Stripe',
+          payStatus: 'Paid',
+          orderStatus: 'Confirmed',
+          transactionId: stripePaymentId,
+          note: `Paid via Stripe (${stripePaymentId})`,
+          isOnline: true,
+        })
+      } catch (err) {
+        setPaymentProcessing(null)
+        if (err?.message !== 'Payment cancelled') {
+          setFormError(err?.message || 'Stripe payment failed. Please try again.')
+        }
+      } finally {
+        setBusy(false)
+      }
+      return
+    }
+
+    // ── Razorpay payment ──────────────────────────────────────────────────
     if (!hasRazorpayKey) {
       setFormError(
         'Add your Razorpay Key ID in .env as VITE_RAZORPAY_KEY_ID, then restart the dev server.'
@@ -575,8 +616,8 @@ export default function Checkout() {
         name: resolved.contact.name,
         email: resolved.contact.email,
         phone: resolved.contact.phone,
-        description: 'EvaraNest order',
-        orderId: 'EN-pending',
+        description: 'Online Gulf Uniform order',
+        orderId: 'OGU-pending',
       })
       await placeOrderApi({
         ...resolved,
@@ -935,24 +976,71 @@ export default function Checkout() {
                   <h3 className="label-caps">Payment method</h3>
                   <p className="text-[14px] font-semibold leading-none">{inr(total)}</p>
                 </div>
+
                 <div className="mt-3 grid gap-2">
+
+                  {/* ── Stripe ── */}
                   <label
-                    className={`flex cursor-pointer items-center gap-2.5 rounded-lg border px-3 py-3 text-[12px] font-medium transition-colors ${
-                      payMode === 'online' ? 'border-forest bg-forest/5' : 'border-line hover:border-ink/40'
+                    className={`flex cursor-pointer items-center gap-3 rounded-xl border px-3 py-3 transition-colors ${
+                      payMode === 'stripe'
+                        ? 'border-[#635BFF] bg-[#635BFF]/5 ring-1 ring-[#635BFF]/30'
+                        : 'border-line hover:border-[#635BFF]/50'
                     }`}
                   >
                     <input
                       type="radio"
                       name="pay-mode"
-                      checked={payMode === 'online'}
-                      onChange={() => setPayMode('online')}
-                      className="accent-forest"
+                      checked={payMode === 'stripe'}
+                      onChange={() => setPayMode('stripe')}
+                      className="accent-[#635BFF]"
                     />
-                    Pay online (Razorpay)
+                    <div className="flex flex-1 items-center justify-between gap-2">
+                      <div>
+                        <p className="text-[12px] font-semibold text-ink">Stripe — Card / Apple Pay / Google Pay</p>
+                        <p className="text-[10.5px] text-muted">Visa, Mastercard, Amex — secured by Stripe</p>
+                      </div>
+                      {/* Stripe logo */}
+                      <svg viewBox="0 0 60 25" className="h-5 w-auto shrink-0" aria-label="Stripe">
+                        <path
+                          d="M59.64 14.28h-8.06c.19 1.93 1.6 2.55 3.2 2.55 1.64 0 2.96-.37 4.05-.95v3.32a10 10 0 01-4.56 1c-4.01 0-6.83-2.5-6.83-7.48 0-4.19 2.39-7.52 6.3-7.52 3.92 0 5.96 3.28 5.96 7.5 0 .4-.04 1.26-.06 1.58zm-5.92-5.62c-1.03 0-2.17.73-2.17 2.58h4.25c0-1.85-1.07-2.58-2.08-2.58zM40.95 20.3c-1.44 0-2.32-.6-2.9-1.04l-.02 4.63-4.45.95V5.76h3.96l.1 1.09c.56-.79 1.63-1.42 3.28-1.42 2.9 0 5.62 2.6 5.62 7.4 0 5.23-2.7 7.47-5.59 7.47zm-.95-11.46c-.96 0-1.56.33-1.97.75l.03 5.92c.38.4.98.75 1.94.75 1.5 0 2.5-1.68 2.5-3.7 0-2.05-1.02-3.72-2.5-3.72zM28.24 5.76h4.46V20h-4.46V5.76zm0-4.7l4.46-.96v3.64l-4.46.96V1.06zM19.69 20.3c-1.44 0-2.32-.6-2.9-1.04l-.02 4.63-4.45.95V5.76h3.96l.1 1.09c.56-.79 1.63-1.42 3.28-1.42 2.9 0 5.62 2.6 5.62 7.4 0 5.23-2.7 7.47-5.59 7.47zm-.95-11.46c-.96 0-1.56.33-1.97.75l.03 5.92c.38.4.98.75 1.94.75 1.5 0 2.5-1.68 2.5-3.7 0-2.05-1.02-3.72-2.5-3.72zM9.97 13.2l1.6.74c1.97.91 2.97 2.07 2.97 3.97C14.54 20 12.5 21 9.9 21c-1.5 0-3.07-.38-4.38-1.04v-3.9c1.14.75 2.65 1.3 4.1 1.3.74 0 1.14-.22 1.14-.77 0-.54-.48-.88-1.6-1.4L7.6 14.4C5.7 13.52 4.7 12.3 4.7 10.3 4.7 7.95 6.65 7 9.1 7c1.44 0 2.87.35 4.03.96v3.84a8.1 8.1 0 00-3.8-1.1c-.8 0-1.14.3-1.14.74 0 .49.44.8 1.78 1.76z"
+                          fill="#635BFF"
+                        />
+                      </svg>
+                    </div>
                   </label>
+
+                  {/* ── Razorpay ── */}
                   <label
-                    className={`flex cursor-pointer items-center gap-2.5 rounded-lg border px-3 py-3 text-[12px] font-medium transition-colors ${
-                      payMode === 'cod' ? 'border-forest bg-forest/5' : 'border-line hover:border-ink/40'
+                    className={`flex cursor-pointer items-center gap-3 rounded-xl border px-3 py-3 transition-colors ${
+                      payMode === 'razorpay'
+                        ? 'border-[#2D74F4] bg-[#2D74F4]/5 ring-1 ring-[#2D74F4]/30'
+                        : 'border-line hover:border-[#2D74F4]/50'
+                    }`}
+                  >
+                    <input
+                      type="radio"
+                      name="pay-mode"
+                      checked={payMode === 'razorpay'}
+                      onChange={() => setPayMode('razorpay')}
+                      className="accent-[#2D74F4]"
+                    />
+                    <div className="flex flex-1 items-center justify-between gap-2">
+                      <div>
+                        <p className="text-[12px] font-semibold text-ink">Razorpay — UPI / Card / Net Banking</p>
+                        <p className="text-[10.5px] text-muted">UPI, Cards, Wallets, EMI — India preferred</p>
+                      </div>
+                      <span className="shrink-0 rounded-md bg-[#2D74F4] px-2 py-0.5 text-[9px] font-bold text-white tracking-wide">
+                        RZP
+                      </span>
+                    </div>
+                  </label>
+
+                  {/* ── Cash on Delivery ── */}
+                  <label
+                    className={`flex cursor-pointer items-center gap-3 rounded-xl border px-3 py-3 transition-colors ${
+                      payMode === 'cod'
+                        ? 'border-forest bg-forest/5 ring-1 ring-forest/25'
+                        : 'border-line hover:border-forest/40'
                     }`}
                   >
                     <input
@@ -962,30 +1050,51 @@ export default function Checkout() {
                       onChange={() => setPayMode('cod')}
                       className="accent-forest"
                     />
-                    Cash on delivery
+                    <div className="flex flex-1 items-center justify-between gap-2">
+                      <div>
+                        <p className="text-[12px] font-semibold text-ink">Cash on Delivery (COD)</p>
+                        <p className="text-[10.5px] text-muted">Pay cash or UPI when order arrives</p>
+                      </div>
+                      <span className="shrink-0 text-xl">💵</span>
+                    </div>
                   </label>
                 </div>
-                {payMode === 'cod' && (
-                  <p className="mt-2 text-[11px] text-muted">
-                    Pay with cash or UPI when your order arrives.
+
+                {/* Info banners */}
+                {payMode === 'stripe' && !hasStripeKey && (
+                  <p className="mt-2 rounded-lg bg-[#F3F0FF] px-3 py-2 text-[11px] text-[#635BFF]">
+                    Set <code className="font-mono">VITE_STRIPE_PUBLISHABLE_KEY</code> in{' '}
+                    <code className="font-mono">.env</code> and restart Vite. Get your key from{' '}
+                    <a href="https://dashboard.stripe.com/apikeys" target="_blank" rel="noreferrer" className="underline">
+                      dashboard.stripe.com
+                    </a>
                   </p>
                 )}
-                {payMode === 'online' && !hasRazorpayKey && (
-                  <p className="mt-2 rounded-lg bg-[#FFF4E0] px-3 py-2 text-[11px] text-[#B26A00]">
+                {payMode === 'razorpay' && !hasRazorpayKey && (
+                  <p className="mt-2 rounded-lg bg-[#EBF2FF] px-3 py-2 text-[11px] text-[#2D74F4]">
                     Set <code className="font-mono">VITE_RAZORPAY_KEY_ID</code> in{' '}
                     <code className="font-mono">.env</code> and restart Vite.
                   </p>
                 )}
+                {payMode === 'cod' && (
+                  <p className="mt-2 rounded-lg bg-forest/5 px-3 py-2 text-[11px] text-forest">
+                    ✅ No advance payment needed. Pay when you receive the order.
+                  </p>
+                )}
               </div>
 
-              <button type="submit" disabled={busy} className="btn-ink mt-3 w-full disabled:opacity-50">
+              <button type="submit" disabled={busy} className="btn-ink mt-4 w-full py-3 text-[13px] disabled:opacity-50">
                 {busy
                   ? payMode === 'cod'
-                    ? 'Placing order...'
-                    : 'Opening Razorpay...'
+                    ? 'Placing order…'
+                    : payMode === 'stripe'
+                    ? 'Opening Stripe…'
+                    : 'Opening Razorpay…'
                   : payMode === 'cod'
-                    ? `Place COD order • ${inr(total)}`
-                    : `Pay now • ${inr(total)}`}
+                  ? `Place COD Order · ${inr(total)}`
+                  : payMode === 'stripe'
+                  ? `Pay with Stripe · ${inr(total)}`
+                  : `Pay with Razorpay · ${inr(total)}`}
               </button>
             </div>
           </aside>

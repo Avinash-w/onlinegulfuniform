@@ -3,7 +3,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom'
 import AmazonTrustStrip from '../components/AmazonTrustStrip'
 import ProductRail from '../components/ProductRail'
 import Seo from '../components/Seo'
-import { useCart } from '../context/CartContext'
+import { useCart, inr } from '../context/CartContext'
 import { useLanguage } from '../context/LanguageContext'
 import { useStore } from '../store/StoreContext.jsx'
 import { allProducts, isCustomProduct, productByHandle } from '../store/selectors.js'
@@ -58,7 +58,7 @@ export default function Product() {
   const whatsappBulkUrl = useMemo(() => {
     const phone = '8546063989'
     const productUrl = typeof window !== 'undefined' ? window.location.href : ''
-    const text = `Hi EvaraNest, I want to inquire about a Bulk Order on Amazon Store for:\n*${product?.title || ''}*\nPrice: ₹${product?.price || 0}\nSKU: ${product?.sku || 'N/A'}\nLink: ${productUrl}`
+    const text = `Hi EvaraNest, I want to inquire about a Bulk Order on Amazon Store for:\n*${product?.title || ''}*\nPrice: AED ${product?.price || 0}\nSKU: ${product?.sku || 'N/A'}\nLink: ${productUrl}`
     return `https://api.whatsapp.com/send?phone=91${phone}&text=${encodeURIComponent(text)}`
   }, [product])
 
@@ -314,14 +314,13 @@ export default function Product() {
                   -{discountPercent}%
                 </span>
                 <div className="flex items-start">
-                  <span className="text-xs font-semibold text-slate-800">₹</span>
                   <span className="text-3xl font-bold leading-none text-slate-900">
-                    {product.price}
+                    {inr(product.price)}
                   </span>
                 </div>
               </div>
               <div className="mt-1 text-xs text-slate-500">
-                {t('mrp')} <span className="line-through">₹{mrp}</span>
+                {t('mrp')} <span className="line-through">{inr(mrp)}</span>
               </div>
               <div className="mt-0.5 text-xs text-slate-600">
                 {t('inclusiveTaxes')}
@@ -474,8 +473,7 @@ export default function Product() {
             <div className="sticky top-20 rounded-lg border border-slate-300 bg-white p-4 shadow-sm">
               {/* Buy Box Price */}
               <div className="flex items-baseline">
-                <span className="text-xs font-semibold text-slate-800">₹</span>
-                <span className="text-2xl font-bold text-slate-900">{product.price}.00</span>
+                <span className="text-2xl font-bold text-slate-900">{inr(product.price)}</span>
               </div>
 
               {/* Delivery Speed */}

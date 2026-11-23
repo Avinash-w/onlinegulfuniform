@@ -135,6 +135,8 @@ export default function App() {
             <Route path="/custom-orders" element={shop(<CustomOrderPage />)} />
             <Route path="/inquiry" element={shop(<CustomOrderPage />)} />
             <Route path="/quote" element={shop(<CustomOrderPage />)} />
+            <Route path="/search" element={shop(<Collection />)} />
+            <Route path="/collections" element={shop(<Collection />)} />
             <Route path="/collections/:slug" element={shop(<Collection />)} />
             <Route path="/products/:handle" element={shop(<Product />)} />
             <Route path="/wishlist" element={shop(<Wishlist />)} />

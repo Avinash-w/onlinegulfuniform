@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { inr, useCart } from '../context/CartContext'
+import { useLanguage } from '../context/LanguageContext'
 import { useStore } from '../store/StoreContext.jsx'
 import { freeShippingAt, minOrderAmount, shippingFlat, siteSettings } from '../store/selectors.js'
 import { ArrowLeft, ArrowUp, Check, Close, Minus, Plus, Tag } from './icons'
@@ -26,6 +27,7 @@ export default function CartDrawer() {
 
   const { state } = useStore()
   const navigate = useNavigate()
+  const { t } = useLanguage()
   const shipAt = freeShippingAt(state)
   const shipFlat = shippingFlat(state)
   const placeholder = siteSettings(state).logo || '/logo.png'
@@ -97,10 +99,10 @@ export default function CartDrawer() {
               >
                 <ArrowLeft className="h-5 w-5" />
               </button>
-              <h2 className="label-caps">Apply Coupon</h2>
+              <h2 className="label-caps">{t('applyCoupon')}</h2>
             </div>
           ) : (
-            <h2 className="label-caps">My Bag</h2>
+            <h2 className="label-caps">{t('myBag')}</h2>
           )}
 
           <button
@@ -125,7 +127,7 @@ export default function CartDrawer() {
                     setCouponInput(e.target.value.toUpperCase())
                     if (couponFeedback) setCouponFeedback(null)
                   }}
-                  placeholder="Enter Coupon Code"
+                  placeholder={t('enterCoupon')}
                   className={`flex-1 rounded-lg border bg-cream/40 px-3.5 py-2.5 font-mono text-[13px] font-semibold tracking-wider text-ink outline-none transition-colors ${
                     couponFeedback?.type === 'error'
                       ? 'border-red-500 ring-1 ring-red-500/30'
@@ -137,7 +139,7 @@ export default function CartDrawer() {
                   disabled={!couponInput.trim()}
                   className="rounded-lg bg-forest px-5 py-2.5 text-[11px] font-semibold uppercase tracking-wider text-lime transition-opacity hover:bg-forest/90 disabled:opacity-40"
                 >
-                  Apply
+                  {t('apply')}
                 </button>
               </form>
 
@@ -157,7 +159,7 @@ export default function CartDrawer() {
             {/* Coupons List */}
             <div className="flex-1 space-y-3.5 p-4">
               <p className="text-[11px] font-semibold uppercase tracking-wider2 text-muted">
-                Available Coupons ({activeCoupons.length})
+                {t('availableCoupons')} ({activeCoupons.length})
               </p>
 
               {activeCoupons.length === 0 ? (
@@ -206,7 +208,7 @@ export default function CartDrawer() {
                           <p className="mt-1.5 text-[11.5px] sm:text-[12px] text-graphite leading-snug">
                             {c.type === 'percent'
                               ? `Get ${c.value}% discount on your cart total.`
-                              : `Save Flat ₹${c.value} on this purchase.`}
+                              : `Save Flat ${inr(c.value)} on this purchase.`}
                           </p>
 
                           <p className="mt-1 text-[10.5px] sm:text-[11px] text-muted">
@@ -251,7 +253,7 @@ export default function CartDrawer() {
                                   : 'cursor-not-allowed bg-chalk text-muted'
                               }`}
                             >
-                              Apply
+                              {t('apply')}
                             </button>
                           )}
                         </div>
@@ -266,9 +268,9 @@ export default function CartDrawer() {
           /* View: Empty Bag */
           <div className="flex flex-1 flex-col items-center justify-center px-8 text-center">
             <Img src={placeholder} alt="" className="mb-5 h-24 w-24 object-contain" />
-            <p className="font-display text-lg uppercase">looks like your cart is on a diet</p>
+            <p className="font-display text-lg uppercase">{t('cartEmpty')}</p>
             <p className="mt-2 text-[12px] text-muted">
-              waiting for some handcrafted candles to brighten it up!
+              {t('cartEmptySub')}
             </p>
             <button
               onClick={() => {
@@ -277,7 +279,7 @@ export default function CartDrawer() {
               }}
               className="btn-ink mt-7"
             >
-              Start shopping
+              {t('continueShopping')}
             </button>
           </div>
         ) : (
@@ -291,11 +293,11 @@ export default function CartDrawer() {
                   </div>
                   <div className="min-w-0 flex-1">
                     <p className="line-clamp-2 text-[11.5px] sm:text-[12px] font-medium leading-snug">{l.title}</p>
-                    <p className="mt-0.5 text-[10.5px] sm:text-[11px] text-muted">Size: {l.size}</p>
+                    <p className="mt-0.5 text-[10.5px] sm:text-[11px] text-muted">{t('size')}: {l.size}</p>
                     {l.customNote && (
                       <div className="mt-1 rounded border border-forest/15 bg-forest/5 px-1.5 py-0.5 text-[10px] text-forest">
                         <span className="block text-[8.5px] font-semibold uppercase tracking-wider2 text-forest/80">
-                          Customization:
+                          {t('customization')}:
                         </span>
                         <span className="line-clamp-1 italic text-ink">&ldquo;{l.customNote}&rdquo;</span>
                       </div>
@@ -323,7 +325,7 @@ export default function CartDrawer() {
                         onClick={() => remove(l.key)}
                         className="text-[10.5px] sm:text-[11px] uppercase tracking-wider2 text-muted hover:text-sale underline underline-offset-2"
                       >
-                        Remove
+                        {t('remove')}
                       </button>
                     </div>
                   </div>
@@ -335,7 +337,7 @@ export default function CartDrawer() {
               {/* Savings & Coupons Trigger Row */}
               <div className="mb-2 flex items-center justify-between">
                 <p className="text-[11px] sm:text-[12px] font-medium text-save">
-                  {currentSavings > 0 ? `You save ${inr(currentSavings)} on this order` : 'Available offers'}
+                  {currentSavings > 0 ? `${t('youSave')} ${inr(currentSavings)}` : t('availableOffers')}
                 </p>
                 <button
                   type="button"
@@ -347,7 +349,7 @@ export default function CartDrawer() {
                   title="View and apply coupons"
                 >
                   <Tag className="h-3 w-3" />
-                  <span>{appliedCoupon ? appliedCoupon.code : 'Coupons'}</span>
+                  <span>{appliedCoupon ? appliedCoupon.code : t('coupons')}</span>
                   <ArrowUp className="h-3 w-3" />
                 </button>
               </div>
@@ -356,7 +358,7 @@ export default function CartDrawer() {
               {appliedCoupon && couponDiscount > 0 && (
                 <div className="mb-2 flex items-center justify-between rounded-lg bg-save/10 px-2.5 py-1 text-[11px] sm:text-[12px]">
                   <span className="font-medium text-save flex items-center gap-1">
-                    <Check className="h-3 w-3 sm:h-3.5 sm:w-3.5" /> Coupon ({appliedCoupon.code})
+                    <Check className="h-3 w-3 sm:h-3.5 sm:w-3.5" /> {t('coupon')} ({appliedCoupon.code})
                   </span>
                   <div className="flex items-center gap-2">
                     <span className="font-semibold text-save">-{inr(couponDiscount)}</span>
@@ -364,14 +366,14 @@ export default function CartDrawer() {
                       onClick={removeCoupon}
                       className="text-[10px] text-muted underline hover:text-sale"
                     >
-                      Remove
+                      {t('remove')}
                     </button>
                   </div>
                 </div>
               )}
 
               <div className="mb-2.5 flex items-center justify-between">
-                <span className="label-caps text-[10.5px] sm:text-[11px]">Subtotal</span>
+                <span className="label-caps text-[10.5px] sm:text-[11px]">{t('subtotal')}</span>
                 <div className="text-right">
                   {couponDiscount > 0 && (
                     <span className="mr-2 text-[11px] sm:text-[12px] text-muted line-through">{inr(subtotal)}</span>
@@ -382,7 +384,7 @@ export default function CartDrawer() {
 
               {belowMin && (
                 <p className="mb-2 rounded-lg bg-sale/10 px-2.5 py-1.5 text-center text-[11px] sm:text-[12px] font-medium text-sale">
-                  Minimum order amount is {inr(minOrder)} — add {inr(minOrder - (finalSubtotal ?? subtotal))} more to checkout.
+                  {t('minOrderMsg', { amount: inr(minOrder), more: inr(minOrder - (finalSubtotal ?? subtotal)) })}
                 </p>
               )}
               <button
@@ -390,10 +392,10 @@ export default function CartDrawer() {
                 onClick={goCheckout}
                 disabled={belowMin}
               >
-                Checkout · {inr(effectiveTotal)}
+                {t('checkout')} · {inr(effectiveTotal)}
               </button>
               <p className="mt-2 text-center text-[10px] sm:text-[11px] text-muted">
-                {shipAt > 0 ? `Shop for ${inr(shipAt)} & get free shipping` : 'Free shipping across India'} · 7 day returns
+                {shipAt > 0 ? `${t('shopForFreeShipping', { amount: inr(shipAt) })}` : t('freeShippingNote')} · {t('dayReturns')}
               </p>
             </div>
           </>

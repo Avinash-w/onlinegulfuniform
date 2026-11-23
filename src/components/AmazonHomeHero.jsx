@@ -1,54 +1,70 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { useLanguage } from '../context/LanguageContext'
 
-const FALLBACK_IMG =
-  'https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?auto=format&fit=crop&w=400&q=80'
+/* Palette: white #FFFFFF · navy #0B2545 · royal blue #1D4ED8 · deep blue #1E40AF · tint #EFF4FF */
 
-function ProductTile({ p, meta }) {
+const FALLBACK_IMG =
+  'https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?auto=format&fit=crop&w=600&q=80'
+
+/* ---------- Product card (portrait, clothing-store style) ---------- */
+function ProductCard({ p }) {
+  const { t } = useLanguage()
   const hasDiscount = p.compareAt && p.compareAt > p.price
+  const pct = hasDiscount ? Math.round(((p.compareAt - p.price) / p.compareAt) * 100) : 0
   return (
     <Link to={`/products/${p.handle}`} className="group block">
-      <div className="aspect-[4/5] overflow-hidden rounded-xl bg-[#EFF4FF]">
+      <div className="relative aspect-[3/4] overflow-hidden rounded-xl bg-[#EFF4FF]">
         <img
           src={p.images?.[0] || FALLBACK_IMG}
           alt={p.title}
           loading="lazy"
           className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
         />
+        {hasDiscount && (
+          <span className="absolute left-2 top-2 rounded-md bg-[#1D4ED8] px-2 py-0.5 text-[11px] font-bold text-white">
+            −{pct}%
+          </span>
+        )}
+        {/* Hover label only on devices that can hover */}
+        <span className="pointer-events-none absolute inset-x-2 bottom-2 hidden translate-y-2 rounded-lg bg-white/95 py-2 text-center text-xs font-semibold text-[#0B2545] opacity-0 shadow transition group-hover:translate-y-0 group-hover:opacity-100 md:block">
+          {t('viewDetails')}
+        </span>
       </div>
-      <p className="mt-2 truncate text-[13px] font-medium text-[#0B2545]">{p.title}</p>
-      {meta ? (
-        <p className="text-xs font-semibold text-[#1D4ED8]">{meta}</p>
-      ) : (
-        <p className="text-xs text-[#0B2545]/70">
-          <span className="font-semibold text-[#0B2545]">AED {p.price}</span>
-          {hasDiscount && (
-            <span className="ml-1.5 text-[#0B2545]/40 line-through">AED {p.compareAt}</span>
-          )}
-        </p>
-      )}
+      <p className="mt-2.5 line-clamp-2 min-h-[2.5rem] text-[13px] font-medium leading-snug text-[#0B2545] sm:text-sm">
+        {p.title}
+      </p>
+      <p className="mt-0.5 text-sm">
+        <span className="font-semibold text-[#0B2545]">AED {p.price}</span>
+        {hasDiscount && (
+          <span className="ml-2 text-xs text-[#0B2545]/40 line-through">AED {p.compareAt}</span>
+        )}
+      </p>
     </Link>
   )
 }
 
-function ShelfCard({ title, products, meta, linkTo, linkLabel, className = '' }) {
+/* ---------- Section with heading + product grid ---------- */
+function ProductRow({ title, products, linkTo, linkLabel }) {
+  const { t } = useLanguage()
+  if (!products.length) return null
   return (
-    <section className={`flex flex-col rounded-3xl border border-[#0B2545]/10 bg-white p-5 sm:p-6 ${className}`}>
-      <div className="flex items-baseline justify-between gap-4">
-        <h3 className="font-serif text-xl font-semibold leading-snug text-[#0B2545] sm:text-2xl">
+    <section className="py-6 md:py-8">
+      <div className="mb-4 flex items-end justify-between gap-3 md:mb-5">
+        <h2 className="font-serif text-xl font-semibold leading-tight text-[#0B2545] sm:text-2xl md:text-3xl">
           {title}
-        </h3>
+        </h2>
         <Link
           to={linkTo}
-          className="shrink-0 text-xs font-semibold text-[#1D4ED8] underline-offset-4 hover:underline"
+          className="shrink-0 whitespace-nowrap text-sm font-semibold text-[#1D4ED8] underline-offset-4 hover:underline"
         >
-          {linkLabel} →
+          <span className="sm:hidden">{t('viewAll')}</span>
+          <span className="hidden sm:inline">{linkLabel} →</span>
         </Link>
       </div>
-      <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
+      <div className="grid grid-cols-2 gap-x-3 gap-y-6 sm:gap-x-4 sm:gap-y-8 md:grid-cols-4">
         {products.map((p, i) => (
-          <ProductTile key={p.handle + i} p={p} meta={meta} />
+          <ProductCard key={p.handle + i} p={p} />
         ))}
       </div>
     </section>
@@ -59,26 +75,27 @@ export default function AmazonHomeHero({ catalogue = [] }) {
   const { t } = useLanguage()
   const [slide, setSlide] = useState(0)
   const [paused, setPaused] = useState(false)
+  const touchX = useRef(null)
 
   const slides = [
     {
       title: t('heroTitle1'),
       subtitle: t('heroSub1'),
-      image: 'https://images.unsplash.com/photo-1577896851231-70ef18881754?auto=format&fit=crop&w=1400&q=80',
+      image: 'https://images.unsplash.com/photo-1577896851231-70ef18881754?auto=format&fit=crop&w=1920&q=80',
       link: '/collections/boys',
       badge: 'New School Session 2026',
     },
     {
       title: t('heroTitle2'),
       subtitle: t('heroSub2'),
-      image: 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=1400&q=80',
+      image: 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=1920&q=80',
       link: '/collections/industrial-uniforms',
       badge: 'Certified Workwear',
     },
     {
       title: t('heroTitle3'),
       subtitle: t('heroSub3'),
-      image: 'https://images.unsplash.com/photo-1552902865-b72c031ac5ea?auto=format&fit=crop&w=1400&q=80',
+      image: 'https://images.unsplash.com/photo-1552902865-b72c031ac5ea?auto=format&fit=crop&w=1920&q=80',
       link: '/collections/girls',
       badge: 'PE & Sports Kits',
     },
@@ -92,24 +109,69 @@ export default function AmazonHomeHero({ catalogue = [] }) {
 
   const go = (n) => setSlide((n + slides.length) % slides.length)
 
+  // Swipe left / right on touch screens
+  const onTouchStart = (e) => {
+    touchX.current = e.touches[0].clientX
+    setPaused(true)
+  }
+  const onTouchEnd = (e) => {
+    if (touchX.current != null) {
+      const dx = e.changedTouches[0].clientX - touchX.current
+      if (Math.abs(dx) > 50) go(slide + (dx < 0 ? 1 : -1))
+    }
+    touchX.current = null
+    setPaused(false)
+  }
+
   const boysProducts = catalogue.filter((p) => p.category === 'Boys').slice(0, 4)
   const girlsProducts = catalogue.filter((p) => p.category === 'Girls').slice(0, 4)
   const industrialProducts = catalogue.filter((p) => p.category === 'Industrial Uniforms').slice(0, 4)
   const allUniforms = catalogue.slice(0, 4)
 
+  const categories = [
+    { label: t('boysUniforms'), sub: t('boysSub'), to: '/collections/boys', image: slides[0].image },
+    { label: t('girlsUniforms'), sub: t('girlsSub'), to: '/collections/girls', image: slides[2].image },
+    { label: t('industrialWorkwear'), sub: t('industrialSub'), to: '/collections/industrial-uniforms', image: slides[1].image },
+  ]
+
   return (
-    <div className="bg-[#FFFFFF]">
-      {/* ───────── Hero ───────── */}
+    <div className="bg-white">
+      {/* ───────── Hero banner ─────────
+          Phone: photo on top, navy text panel below (nothing overlaps the photo)
+          Tablet / desktop: text overlays the photo                             */}
       <section
-        className="container px-4 pb-6 pt-6 sm:px-6 sm:pt-10 lg:px-8"
+        className="container px-3 pt-3 sm:px-6 sm:pt-6 lg:px-8"
         onMouseEnter={() => setPaused(true)}
         onMouseLeave={() => setPaused(false)}
+        onTouchStart={onTouchStart}
+        onTouchEnd={onTouchEnd}
         aria-roledescription="carousel"
+        aria-label="Featured collections"
       >
-        <div className="grid items-stretch gap-6 lg:grid-cols-12 lg:gap-10">
-          {/* Copy column */}
-          <div className="order-2 flex flex-col justify-between lg:order-1 lg:col-span-5">
-            <div className="grid">
+        <div className="overflow-hidden rounded-2xl bg-[#0B2545] sm:rounded-3xl md:relative md:h-[460px] lg:h-[560px]">
+          {/* Photo layer */}
+          <div className="relative h-[230px] sm:h-[320px] md:absolute md:inset-0 md:h-auto">
+            {slides.map((s, idx) => (
+              <img
+                key={s.image}
+                src={s.image}
+                alt=""
+                className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-1000 ${
+                  slide === idx ? 'opacity-100' : 'opacity-0'
+                }`}
+              />
+            ))}
+            {/* Text-zone fade (tablet+ only) */}
+            <div className="pointer-events-none absolute inset-0 hidden bg-gradient-to-r from-[#0B2545]/95 via-[#0B2545]/60 to-[#0B2545]/0 md:block lg:via-[#0B2545]/45" />
+            {/* Slide counter on phone */}
+            <span className="absolute bottom-3 right-3 rounded-full bg-[#0B2545]/70 px-2.5 py-1 text-[11px] font-semibold text-white md:hidden">
+              {slide + 1} / {slides.length}
+            </span>
+          </div>
+
+          {/* Copy + controls */}
+          <div className="relative z-10 px-5 pb-5 pt-5 sm:px-8 sm:pb-6 sm:pt-6 md:flex md:h-full md:flex-col md:justify-center md:p-0 md:pl-10 lg:pl-16">
+            <div className="grid max-w-xl">
               {slides.map((s, idx) => (
                 <div
                   key={s.title + idx}
@@ -120,160 +182,167 @@ export default function AmazonHomeHero({ catalogue = [] }) {
                       : 'pointer-events-none translate-y-3 opacity-0'
                   }`}
                 >
-                  <span className="inline-flex items-center gap-2 rounded-full border border-[#1D4ED8]/50 bg-[#1D4ED8]/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-[#1D4ED8]">
-                    <span className="h-1.5 w-1.5 rounded-full bg-[#1D4ED8]" />
+                  <span className="inline-block rounded-full bg-white px-3 py-1 text-[10px] font-bold uppercase tracking-[0.14em] text-[#1D4ED8] sm:text-[11px]">
                     {s.badge}
                   </span>
-                  <h1 className="mt-5 font-serif text-3xl sm:text-4xl xl:text-5xl font-semibold leading-[1.08] tracking-tight text-[#0B2545]">
+                  <h1 className="mt-3 font-serif text-[1.65rem] font-semibold leading-[1.1] tracking-tight text-white sm:text-4xl md:mt-4 md:text-4xl lg:text-6xl lg:leading-[1.05]">
                     {s.title}
                   </h1>
-                  <p className="mt-4 max-w-md text-sm sm:text-base leading-relaxed text-[#0B2545]/70">
+                  <p className="mt-2.5 max-w-md text-sm leading-relaxed text-white/80 sm:text-base md:mt-4">
                     {s.subtitle}
                   </p>
-                  <Link
-                    to={s.link}
-                    tabIndex={slide === idx ? 0 : -1}
-                    className="mt-6 inline-flex items-center gap-2 rounded-full bg-[#1D4ED8] px-7 py-3 text-sm font-semibold text-white transition hover:bg-[#1E40AF] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#1D4ED8]"
-                  >
-                    {t('shopNow')} <span aria-hidden>→</span>
-                  </Link>
+                  <div className="mt-5 flex flex-col gap-2.5 sm:flex-row sm:flex-wrap md:mt-7 md:gap-3">
+                    <Link
+                      to={s.link}
+                      tabIndex={slide === idx ? 0 : -1}
+                      className="inline-flex items-center justify-center gap-2 rounded-full bg-white px-7 py-3.5 text-sm font-semibold text-[#0B2545] transition hover:bg-[#EFF4FF] active:scale-[0.98]"
+                    >
+                      {t('shopNow')} <span aria-hidden>→</span>
+                    </Link>
+                    <a
+                      href="#b2b-quote"
+                      tabIndex={slide === idx ? 0 : -1}
+                      className="inline-flex items-center justify-center rounded-full border border-white/60 px-7 py-3.5 text-sm font-semibold text-white transition hover:bg-white/10 active:scale-[0.98]"
+                    >
+                      {t('requestQuote')}
+                    </a>
+                  </div>
                 </div>
               ))}
             </div>
 
-            {/* Slide controls */}
-            <div className="mt-8 flex items-center gap-4 lg:mt-0">
-              <div className="flex flex-1 gap-2">
-                {slides.map((s, idx) => (
+            {/* Dots (+ arrows from tablet up) */}
+            <div className="mt-5 flex items-center justify-between md:absolute md:inset-x-10 md:bottom-5 md:mt-0 lg:inset-x-16">
+              <div className="flex items-center gap-2">
+                {slides.map((_, idx) => (
                   <button
                     key={idx}
                     onClick={() => go(idx)}
                     aria-label={`Go to slide ${idx + 1}`}
-                    className="group relative h-6 flex-1"
+                    aria-current={slide === idx}
+                    className="flex h-6 items-center"
                   >
-                    <span className="absolute inset-x-0 top-1/2 h-[3px] -translate-y-1/2 rounded bg-[#0B2545]/15" />
                     <span
-                      key={slide === idx ? `on-${slide}-${paused}` : 'off'}
-                      className={`absolute left-0 top-1/2 h-[3px] -translate-y-1/2 rounded bg-[#1D4ED8] ${
-                        slide === idx ? (paused ? 'w-full' : 'hero-progress') : 'w-0'
+                      className={`block h-2 rounded-full transition-all ${
+                        slide === idx ? 'w-8 bg-white' : 'w-2 bg-white/40'
                       }`}
                     />
                   </button>
                 ))}
               </div>
-              <div className="flex gap-2">
+              <div className="hidden gap-2 md:flex">
                 <button
                   onClick={() => go(slide - 1)}
                   aria-label="Previous slide"
-                  className="flex h-10 w-10 items-center justify-center rounded-full border border-[#0B2545]/20 text-[#0B2545] transition hover:bg-[#0B2545] hover:text-[#FFFFFF]"
+                  className="flex h-10 w-10 items-center justify-center rounded-full bg-white/90 text-[#0B2545] transition hover:bg-white"
                 >
                   ‹
                 </button>
                 <button
                   onClick={() => go(slide + 1)}
                   aria-label="Next slide"
-                  className="flex h-10 w-10 items-center justify-center rounded-full border border-[#0B2545]/20 text-[#0B2545] transition hover:bg-[#0B2545] hover:text-[#FFFFFF]"
+                  className="flex h-10 w-10 items-center justify-center rounded-full bg-white/90 text-[#0B2545] transition hover:bg-white"
                 >
                   ›
                 </button>
               </div>
             </div>
           </div>
-
-          {/* Image column */}
-          <div className="order-1 lg:order-2 lg:col-span-7">
-            <div className="relative h-[280px] overflow-hidden rounded-3xl sm:h-[380px] lg:h-[500px]">
-              {slides.map((s, idx) => (
-                <img
-                  key={s.image}
-                  src={s.image}
-                  alt={s.title}
-                  className={`absolute inset-0 h-full w-full object-cover transition-all duration-1000 ${
-                    slide === idx ? 'scale-100 opacity-100' : 'scale-105 opacity-0'
-                  }`}
-                />
-              ))}
-              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#0B2545]/40 via-transparent to-transparent" />
-              <span className="absolute bottom-4 right-5 font-serif text-sm tracking-widest text-white/90">
-                0{slide + 1} / 0{slides.length}
-              </span>
-            </div>
-          </div>
         </div>
       </section>
 
-      {/* ───────── Shelves ───────── */}
-      <section className="container px-4 pb-12 pt-6 sm:px-6 lg:px-8">
-        <div className="grid gap-5 lg:grid-cols-12">
-          {/* Boys Uniforms Shelf */}
-          <ShelfCard
-            className="lg:col-span-8"
-            title="Boys School Uniforms — Pants, Shirts & PE"
-            products={boysProducts.length ? boysProducts : allUniforms}
-            linkTo="/collections/boys"
-            linkLabel="View all Boys Uniforms"
-          />
-
-          {/* B2B Quote Card */}
-          <aside className="flex flex-col justify-between overflow-hidden rounded-3xl bg-[#0B2545] p-6 text-[#FFFFFF] lg:col-span-4">
-            <div>
-              <h3 className="font-serif text-2xl font-semibold leading-snug">
-                {t('bulkCorporate')}
-              </h3>
-              <p className="mt-2 text-sm leading-relaxed text-[#FFFFFF]/70">{t('bulkSub')}</p>
-              <div className="mt-5 aspect-[16/9] overflow-hidden rounded-2xl">
-                <img
-                  src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=700&q=80"
-                  alt="Industrial workwear"
-                  loading="lazy"
-                  className="h-full w-full object-cover"
-                />
+      {/* ───────── Shop by category ─────────
+          Phone: swipeable row · Tablet+: 3 columns                    */}
+      <section className="container px-4 pt-8 sm:px-6 md:pt-10 lg:px-8">
+        <h2 className="font-serif text-xl font-semibold text-[#0B2545] sm:text-2xl md:text-3xl">
+          {t('shopByCategory')}
+        </h2>
+        <div className="home-swipe -mx-4 mt-4 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-1 sm:mx-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:overflow-visible sm:px-0 md:mt-5">
+          {categories.map((c) => (
+            <Link
+              key={c.label}
+              to={c.to}
+              className="group relative block aspect-[4/5] w-[68%] shrink-0 snap-start overflow-hidden rounded-2xl bg-[#EFF4FF] sm:aspect-[3/4] sm:w-auto"
+            >
+              <img
+                src={c.image}
+                alt=""
+                loading="lazy"
+                className="h-full w-full object-cover transition duration-700 group-hover:scale-105"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#0B2545]/85 via-[#0B2545]/10 to-transparent" />
+              <div className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-2 p-4 md:p-5">
+                <div className="min-w-0">
+                  <p className="font-serif text-lg font-semibold leading-tight text-white md:text-xl lg:text-2xl">
+                    {c.label}
+                  </p>
+                  <p className="mt-0.5 text-xs text-white/75 md:text-sm">{c.sub}</p>
+                </div>
+                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white text-[#0B2545] transition group-hover:bg-[#1D4ED8] group-hover:text-white md:h-10 md:w-10">
+                  →
+                </span>
               </div>
-              <p className="mt-3 text-xs font-semibold uppercase tracking-[0.15em] text-[#93C5FD]">
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      {/* ───────── Product rows ───────── */}
+      <div className="container px-4 sm:px-6 lg:px-8">
+        <ProductRow
+          title={t('boysSection')}
+          products={boysProducts.length ? boysProducts : allUniforms}
+          linkTo="/collections/boys"
+          linkLabel={t('viewAllBoys')}
+        />
+        <ProductRow
+          title={t('girlsSection')}
+          products={girlsProducts.length ? girlsProducts : allUniforms}
+          linkTo="/collections/girls"
+          linkLabel={t('viewAllGirls')}
+        />
+
+        {/* Bulk / B2B banner */}
+        <section className="my-6 overflow-hidden rounded-2xl bg-gradient-to-br from-[#1D4ED8] to-[#0B2545] sm:rounded-3xl md:my-8">
+          <div className="grid items-center gap-5 p-5 sm:p-8 md:grid-cols-[1fr_auto] md:gap-8 md:p-10">
+            <div>
+              <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[#BFDBFE] sm:text-[11px]">
                 Corporate Invoicing &amp; Custom Embroidery
               </p>
+              <h3 className="mt-2 font-serif text-xl font-semibold leading-tight text-white sm:text-2xl md:text-3xl">
+                {t('bulkCorporate')}
+              </h3>
+              <p className="mt-2 max-w-xl text-sm leading-relaxed text-white/75">{t('bulkSub')}</p>
             </div>
-            <div className="mt-6 flex flex-col gap-2">
+            <div className="flex flex-col gap-2.5 sm:flex-row md:flex-col lg:flex-row">
               <a
                 href="#b2b-quote"
-                className="rounded-full bg-white py-3 text-center text-sm font-semibold text-[#0B2545] transition hover:bg-[#EFF4FF]"
+                className="rounded-full bg-white px-7 py-3.5 text-center text-sm font-semibold text-[#0B2545] transition hover:bg-[#EFF4FF] active:scale-[0.98]"
               >
                 {t('requestQuote')}
               </a>
               <Link
                 to="/policies/contact-information"
-                className="py-1 text-center text-xs font-semibold text-[#FFFFFF]/80 underline-offset-4 hover:underline"
+                className="rounded-full border border-white/60 px-7 py-3.5 text-center text-sm font-semibold text-white transition hover:bg-white/10 active:scale-[0.98]"
               >
                 {t('contactUs')}
               </Link>
             </div>
-          </aside>
+          </div>
+        </section>
 
-          {/* Girls Uniforms Shelf */}
-          <ShelfCard
-            className="lg:col-span-6"
-            title="Girls School Uniforms — Skirts, Pinafores & Shirts"
-            products={girlsProducts.length ? girlsProducts : allUniforms}
-            linkTo="/collections/girls"
-            linkLabel="View all Girls Uniforms"
-          />
+        <ProductRow
+          title="Industrial & Safety Workwear"
+          products={industrialProducts.length ? industrialProducts : allUniforms}
+          linkTo="/collections/industrial-uniforms"
+          linkLabel={t('viewAllIndustrial')}
+        />
+        <div className="pb-8 md:pb-10" />
+      </div>
 
-          {/* Industrial Uniforms Shelf */}
-          <ShelfCard
-            className="lg:col-span-6"
-            title="Industrial & Safety Workwear — Coveralls, Polos & Suits"
-            products={industrialProducts.length ? industrialProducts : allUniforms}
-            linkTo="/collections/industrial-uniforms"
-            linkLabel="View all Industrial Uniforms"
-          />
-        </div>
-      </section>
-
-      {/* Progress-bar animation (scoped) */}
       <style>{`
-        @keyframes heroProgress { from { width: 0 } to { width: 100% } }
-        .hero-progress { animation: heroProgress 6s linear forwards }
-        @media (prefers-reduced-motion: reduce) { .hero-progress { animation: none; width: 100% } }
+        .home-swipe { scrollbar-width: none; -ms-overflow-style: none; -webkit-overflow-scrolling: touch; }
+        .home-swipe::-webkit-scrollbar { display: none; }
       `}</style>
     </div>
   )

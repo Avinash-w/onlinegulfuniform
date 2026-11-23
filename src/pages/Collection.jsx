@@ -1,5 +1,5 @@
-import { useMemo, useState } from 'react'
-import { Link, useNavigate, useParams } from 'react-router-dom'
+import { useEffect, useMemo, useState } from 'react'
+import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import CustomOrderPage from './CustomOrderPage'
 import Breadcrumbs from '../components/Breadcrumbs'
 import CouponMarquee from '../components/CouponMarquee'
@@ -20,6 +20,7 @@ import {
   priceBounds,
 } from '../lib/filters'
 import { useStore, inr } from '../store/StoreContext.jsx'
+import { useLanguage } from '../context/LanguageContext'
 import {
   allCategories,
   allProducts,
@@ -28,15 +29,16 @@ import {
   storefrontContent,
 } from '../store/selectors.js'
 
-const DEFAULT_SORT = [
-  { value: 'featured', label: 'Featured' },
-  { value: 'best-selling', label: 'Best selling' },
-  { value: 'price-asc', label: 'Price, low to high' },
-  { value: 'price-desc', label: 'Price, high to low' },
-  { value: 'newest', label: 'Newest' },
+const DEFAULT_SORT_VALUES = [
+  { value: 'featured', key: 'featured' },
+  { value: 'best-selling', key: 'bestSelling' },
+  { value: 'price-asc', key: 'priceLowHigh' },
+  { value: 'price-desc', key: 'priceHighLow' },
+  { value: 'newest', key: 'newest' },
 ]
 
 function PriceRangeSlider({ min, max, value, onChange }) {
+  const { t } = useLanguage()
   const lo = value?.min ?? min
   const hi = value?.max ?? max
   const span = Math.max(max - min, 1)
@@ -54,7 +56,7 @@ function PriceRangeSlider({ min, max, value, onChange }) {
 
   return (
     <div className="pb-1 pt-1">
-      <p className="text-[12px] text-muted">Selected Price Range</p>
+      <p className="text-[12px] text-muted">{t('selectedPriceRange')}</p>
       <p className="mt-1 text-[15px] font-semibold text-ink">
         {inr(lo)} - {inr(hi)}
       </p>
@@ -90,33 +92,58 @@ function PriceRangeSlider({ min, max, value, onChange }) {
 }
 
 export default function Collection() {
-  const { slug } = useParams()
+  const { slug = 'all-products' } = useParams()
+  const [searchParams] = useSearchParams()
+  const q = searchParams.get('q') || ''
+  const cat = searchParams.get('category') || ''
 
   if (['custom-orders', 'bulk-quote', 'bulk-orders'].includes(slug)) {
     return <CustomOrderPage />
   }
 
-  return <CollectionContent key={slug} slug={slug} />
+  return <CollectionContent key={`${slug}-${q}-${cat}`} slug={slug} />
 }
 
 function CollectionContent({ slug }) {
   const navigate = useNavigate()
+  const [searchParams, setSearchParams] = useSearchParams()
+  const urlQuery = searchParams.get('q') || ''
+  const urlCategory = searchParams.get('category') || ''
+
   const { state } = useStore()
+  const { t } = useLanguage()
   const content = storefrontContent(state)
   const collectionMeta = content.collectionMeta ?? {}
   const filterGroups = filterGroupsOf(state).length ? filterGroupsOf(state) : []
   const colorSwatches = colorSwatchesOf(state)
-  const sortOptions = content.sortOptions?.length ? content.sortOptions : DEFAULT_SORT
+  const sortOptions = content.sortOptions?.length ? content.sortOptions : DEFAULT_SORT_VALUES
   const catalogue = allProducts(state)
 
-  const meta = collectionMeta[slug] ?? {
-    title: slug.replace(/-/g, ' ').replace(/\b\w/g, (m) => m.toUpperCase()),
-    banner: collectionMeta['all-products']?.banner,
-    crumbs: [
-      { label: 'Home', href: '/' },
-      { label: slug.replace(/-/g, ' ').replace(/\b\w/g, (m) => m.toUpperCase()), href: `/collections/${slug}` }
-    ],
-  }
+  const isSearchMode = Boolean(urlQuery.trim())
+
+  const meta = useMemo(() => {
+    if (isSearchMode && (slug === 'all-products' || slug === 'all' || !slug)) {
+      return {
+        title: `Search: “${urlQuery.trim()}”`,
+        banner: collectionMeta['all-products']?.banner,
+        crumbs: [
+          { label: 'Home', href: '/' },
+          { label: 'All Products', href: '/collections/all-products' },
+          { label: `Search: “${urlQuery.trim()}”`, href: `/collections/all-products?q=${encodeURIComponent(urlQuery.trim())}` },
+        ],
+      }
+    }
+    return (
+      collectionMeta[slug] ?? {
+        title: slug.replace(/-/g, ' ').replace(/\b\w/g, (m) => m.toUpperCase()),
+        banner: collectionMeta['all-products']?.banner,
+        crumbs: [
+          { label: 'Home', href: '/' },
+          { label: slug.replace(/-/g, ' ').replace(/\b\w/g, (m) => m.toUpperCase()), href: `/collections/${slug}` },
+        ],
+      }
+    )
+  }, [slug, collectionMeta, isSearchMode, urlQuery])
 
   const categories = allCategories(state)
   const categoryBadges = useMemo(() => {
@@ -124,6 +151,35 @@ function CollectionContent({ slug }) {
       { label: 'All Products', slug: 'all-products', href: '/collections/all-products' },
     ]
     const seen = new Set(['all-products', 'home', 'track-order', 'about-us', 'contact-us'])
+
+    // The local catalogue can render before the PHP API provides category
+    // records. Derive useful collection links from products in that case.
+    if (!categories.length) {
+      const groups = new Map()
+      for (const product of catalogue) {
+        const categoryName = product.category?.trim()
+        if (!categoryName) continue
+        const categorySlug = categoryName.toLowerCase().replace(/[^a-z0-9]+/g, '-')
+        if (!groups.has(categorySlug)) groups.set(categorySlug, { name: categoryName, children: new Map() })
+        const subcategory = product.subcategory?.trim()
+        if (subcategory) {
+          const subSlug = subcategory.toLowerCase().replace(/[^a-z0-9]+/g, '-')
+          if (!groups.get(categorySlug).children.has(subSlug)) {
+            const label = subcategory.replace(/-/g, ' ').replace(/\b\w/g, (letter) => letter.toUpperCase())
+            groups.get(categorySlug).children.set(subSlug, label)
+          }
+        }
+      }
+      for (const [slug, group] of groups) {
+        list.push({ label: group.name, slug, href: `/collections/${slug}` })
+        for (const [subSlug, label] of group.children) {
+          if (seen.has(subSlug)) continue
+          seen.add(subSlug)
+          list.push({ label: `${group.name} · ${label}`, slug: subSlug, href: `/collections/${subSlug}` })
+        }
+      }
+      return list
+    }
 
     for (const c of categories) {
       if (!c.active || seen.has(c.slug)) continue
@@ -137,21 +193,27 @@ function CollectionContent({ slug }) {
       }
     }
     return list
-  }, [categories])
+  }, [categories, catalogue])
 
   const base = useMemo(() => {
-    if (slug === 'all-products' || slug === 'all') return catalogue
-    const found = catalogue.filter((p) => {
-      if (p.collections?.includes(slug)) return true
-      if (p.subcategory === slug) return true
-      const catNorm = (p.category ?? '').toLowerCase().replace(/[^a-z0-9]+/g, '-')
-      if (catNorm === slug) return true
-      const subNorm = (p.subcategory ?? '').toLowerCase().replace(/[^a-z0-9]+/g, '-')
-      if (subNorm === slug) return true
-      return false
-    })
-    return found.length ? found : catalogue
-  }, [slug, catalogue])
+    let pool = catalogue
+    const catNorm = urlCategory && urlCategory !== 'All' ? urlCategory.toLowerCase().replace(/[^a-z0-9]+/g, '-') : null
+    const effectiveSlug = (slug === 'all-products' || slug === 'all' || !slug) ? catNorm : slug
+
+    if (effectiveSlug) {
+      const found = catalogue.filter((p) => {
+        if (p.collections?.includes(effectiveSlug)) return true
+        if (p.subcategory === effectiveSlug) return true
+        const catP = (p.category ?? '').toLowerCase().replace(/[^a-z0-9]+/g, '-')
+        if (catP === effectiveSlug) return true
+        const subP = (p.subcategory ?? '').toLowerCase().replace(/[^a-z0-9]+/g, '-')
+        if (subP === effectiveSlug) return true
+        return false
+      })
+      if (found.length) pool = found
+    }
+    return pool
+  }, [slug, catalogue, urlCategory])
 
   const bounds = useMemo(() => priceBounds(base), [base])
 
@@ -160,7 +222,22 @@ function CollectionContent({ slug }) {
   const [filtersOpen, setFiltersOpen] = useState(false)
   const [selected, setSelected] = useState({})
   const [openGroups, setOpenGroups] = useState(['Price', 'Category'])
-  const [query, setQuery] = useState('')
+  const [query, setQuery] = useState(urlQuery)
+
+  useEffect(() => {
+    setQuery(urlQuery)
+  }, [urlQuery])
+
+  const handleQueryChange = (val) => {
+    setQuery(val)
+    const next = new URLSearchParams(searchParams)
+    if (val.trim()) {
+      next.set('q', val.trim())
+    } else {
+      next.delete('q')
+    }
+    setSearchParams(next, { replace: true })
+  }
 
   // Facets reflect what's actually in this collection.
   const facets = useMemo(() => deriveFacets(base, filterGroups), [base, filterGroups])
@@ -185,6 +262,10 @@ function CollectionContent({ slug }) {
   const clearAll = () => {
     setSelected({})
     setQuery('')
+    const next = new URLSearchParams(searchParams)
+    next.delete('q')
+    next.delete('category')
+    setSearchParams(next, { replace: true })
   }
 
   const toggleGroup = (group) =>
@@ -202,7 +283,34 @@ function CollectionContent({ slug }) {
 
   const FilterPanel = (
     <div className="space-y-4">
+      <div className="border-b border-line pb-4">
+        <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.14em] text-[#0B2545]">Category</p>
+        <div className="space-y-1">
+          {categoryBadges.map((badge) => {
+            const selectedCategory = badge.slug === slug || (slug === 'all' && badge.slug === 'all-products')
+            const categoryCount = badge.slug === 'all-products'
+              ? catalogue.length
+              : catalogue.filter((product) => {
+                  const productCategory = (product.category ?? '').toLowerCase().replace(/[^a-z0-9]+/g, '-')
+                  const productSubcategory = (product.subcategory ?? '').toLowerCase().replace(/[^a-z0-9]+/g, '-')
+                  return product.collections?.includes(badge.slug) || productCategory === badge.slug || productSubcategory === badge.slug
+                }).length
+            return (
+              <button
+                key={`${badge.slug}-${badge.label}`}
+                type="button"
+                onClick={() => { navigate(badge.href); setFiltersOpen(false) }}
+                className={`flex w-full items-center justify-between rounded-lg px-2.5 py-2 text-left text-[12px] transition-colors ${selectedCategory ? 'bg-blue-50 font-semibold text-[#1D4ED8]' : 'text-graphite hover:bg-slate-50'}`}
+              >
+                <span className="truncate">{badge.label}</span>
+                <span className="ml-3 shrink-0 text-[11px] text-muted">{categoryCount}</span>
+              </button>
+            )
+          })}
+        </div>
+      </div>
       {facets.map((fg) => {
+        if (fg.name === 'Category') return null
         const isOpen = openGroups.includes(fg.name)
         if (fg.type === 'price_range') {
           return (
@@ -300,12 +408,18 @@ function CollectionContent({ slug }) {
 
       <CouponMarquee />
 
-      {/* category header */}
-      <div className="container py-3.5 sm:py-6">
-        <div className="flex items-center justify-between gap-3">
-          <h1 className="font-display text-[22px] uppercase leading-tight sm:text-[30px] md:text-[40px] text-[#0B2545]">
-            {meta.title}
-          </h1>
+      {/* Collection heading and browse controls */}
+      <section className="border-b border-slate-200/70 bg-gradient-to-b from-[#F4F7FB] to-white">
+      <div className="container py-5 sm:py-7 lg:py-9">
+        <div className="flex items-end justify-between gap-4">
+          <div className="min-w-0">
+            <p className="mb-1.5 text-[10px] font-semibold uppercase tracking-[0.18em] text-[#1D4ED8] sm:text-[11px]">{t('uniformCatalog')}</p>
+            <h1 className="font-sans text-2xl font-semibold leading-tight tracking-tight text-[#0B2545] sm:text-3xl lg:text-4xl">
+              {meta.title}
+            </h1>
+            <p className="mt-1.5 hidden text-sm text-slate-500 sm:block">Premium school uniforms and workwear, selected for everyday comfort and durability.</p>
+          </div>
+          <span className="shrink-0 pb-1 text-xs font-medium text-slate-500 sm:text-sm">{items.length} {items.length === 1 ? 'item' : 'items'}</span>
 
           {/* Mobile inline Reset button */}
           {isFilteredOrCustomCategory && (
@@ -321,59 +435,19 @@ function CollectionContent({ slug }) {
           )}
         </div>
 
-        {/* Mobile View: Category Dropdown */}
-        <div className="mt-3 block sm:hidden">
-          <div className="relative">
-            <select
-              value={slug === 'all' ? 'all-products' : slug}
-              onChange={(e) => navigate(`/collections/${e.target.value}`)}
-              aria-label="Select Category"
-              className="w-full appearance-none rounded-lg border border-line bg-white px-3.5 py-2.5 pr-9 text-[12.5px] font-semibold text-ink shadow-xs transition-colors focus:border-[#1D4ED8] focus:outline-none focus:ring-1 focus:ring-[#1D4ED8]"
-            >
-              {categoryBadges.map((badge) => (
-                <option key={badge.slug + badge.label} value={badge.slug}>
-                  {badge.label}
-                </option>
-              ))}
-            </select>
-            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-muted">
-              <ChevronDown className="h-4 w-4" />
-            </div>
-          </div>
-        </div>
-
-        {/* Desktop View: Horizontal Category Badges */}
-        <div className="hide-scrollbar -mx-1 mt-3 hidden items-center gap-2 overflow-x-auto p-1 sm:flex sm:flex-wrap">
-          {categoryBadges.map((badge) => {
-            const isActive =
-              slug === badge.slug || (slug === 'all' && badge.slug === 'all-products')
-            return (
-              <Link
-                key={badge.slug + badge.label}
-                to={badge.href}
-                className={`inline-flex shrink-0 items-center rounded-full px-4 py-2 text-[12px] font-semibold tracking-wide transition-all ${
-                  isActive
-                    ? 'bg-[#1D4ED8] font-bold text-white shadow-sm ring-2 ring-[#1D4ED8]/20 border border-[#1D4ED8]'
-                    : 'border border-line bg-white text-[#121124] hover:border-[#1D4ED8] hover:text-[#1D4ED8]'
-                }`}
-              >
-                {badge.label}
-              </Link>
-            )
-          })}
-        </div>
-
         {/* full-width product search */}
         <SearchBar
-          className="mt-3 sm:mt-4"
+          className="mt-4 sm:mt-5"
           value={query}
-          onQueryChange={setQuery}
+          onQueryChange={handleQueryChange}
+          placeholder="Search uniforms, pants, shirts, PE, safety…"
           resultCount={items.length}
         />
       </div>
+      </section>
 
       {/* mobile controls */}
-      <div className="sticky top-[48px] z-30 -mt-px border-y border-line bg-white sm:top-[64px] md:top-[72px] lg:hidden">
+      <div className="sticky top-[108px] z-30 -mt-px border-y border-line bg-white sm:top-[108px] md:top-[124px] lg:hidden">
         <div className="container grid grid-cols-2 divide-x divide-line">
           <button
             onClick={() => setFiltersOpen(true)}
@@ -395,10 +469,10 @@ function CollectionContent({ slug }) {
         </div>
       </div>
 
-      <div className="container flex items-start gap-8 pb-12 pt-3 sm:pb-16 sm:pt-6">
-        <aside className="sticky top-20 lg:top-24 hidden max-h-[calc(100vh-6.5rem)] w-[260px] shrink-0 self-start overflow-y-auto hide-scrollbar lg:block pr-2">
-          <div className="mb-1 flex items-center justify-between">
-            <h2 className="text-[13px] font-semibold uppercase tracking-wider text-ink">Filters</h2>
+      <div className="container flex items-start gap-8 pb-12 pt-4 sm:pb-16 sm:pt-6 lg:gap-10">
+        <aside className="sticky top-20 lg:top-24 hidden max-h-[calc(100vh-6.5rem)] w-[250px] shrink-0 self-start overflow-y-auto rounded-2xl border border-slate-200 bg-white p-5 shadow-sm hide-scrollbar lg:block">
+          <div className="mb-4 flex items-center justify-between">
+            <h2 className="text-[12px] font-semibold uppercase tracking-[0.14em] text-[#0B2545]">Filters</h2>
             {active > 0 && (
               <button onClick={clearAll} className="text-[11px] text-muted underline underline-offset-2">
                 Clear all
@@ -463,17 +537,18 @@ function CollectionContent({ slug }) {
               {sortOpen && (
                 <div className="absolute right-0 top-full z-20 mt-1 w-56 border border-line bg-white py-1 shadow-pop">
                   {sortOptions.map((o) => {
-                    const label = typeof o === 'string' ? o : o.label || o.value
+                    const label = typeof o === 'string' ? o : (o.key ? t(o.key) : (o.label || o.value))
+                    const val = typeof o === 'string' ? o : (o.value || o.label || o)
                     return (
                       <button
-                        key={label}
+                        key={val}
                         onClick={() => {
-                          setSort(label)
+                          setSort(val)
                           setSortOpen(false)
                         }}
                         className="flex w-full items-center gap-2 px-4 py-2.5 text-left text-[12px] hover:bg-chalk"
                       >
-                        <Check className={`h-3.5 w-3.5 ${sort === label ? 'opacity-100' : 'opacity-0'}`} />
+                        <Check className={`h-3.5 w-3.5 ${sort === val ? 'opacity-100' : 'opacity-0'}`} />
                         {label}
                       </button>
                     )
@@ -485,16 +560,20 @@ function CollectionContent({ slug }) {
 
           {items.length === 0 ? (
             <div className="py-24 text-center">
-              <p className="font-display text-[20px] uppercase text-[#0B2545]">Nothing matches those filters</p>
-              <p className="mt-2 text-[12px] text-muted">Try clearing filters to see all uniforms.</p>
-              <button onClick={clearAll} className="btn-ink mt-6 bg-[#1D4ED8] hover:bg-[#1E40AF]">
-                Clear all filters
+              <p className="font-display text-[20px] uppercase text-[#0B2545]">
+                {query.trim() ? `No products match “${query.trim()}”` : 'Nothing matches those filters'}
+              </p>
+              <p className="mt-2 text-[12px] text-muted">
+                {query.trim() ? 'Try checking your spelling or use different keywords.' : 'Try clearing filters to see all uniforms.'}
+              </p>
+              <button onClick={resetEverything} className="btn-ink mt-6 bg-[#1D4ED8] hover:bg-[#1E40AF]">
+                {query.trim() ? 'Clear search' : 'Clear all filters'}
               </button>
             </div>
           ) : (
-            <div className="grid grid-cols-2 gap-x-3 gap-y-9 md:grid-cols-3 md:gap-x-5 xl:grid-cols-4">
+            <div className="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-3 md:gap-5 xl:grid-cols-4">
               {items.map((p) => (
-                <ProductCard key={p.handle} product={p} />
+                <ProductCard key={p.handle} product={p} variant="collection" imageRatio="aspect-[4/5]" />
               ))}
             </div>
           )}
@@ -537,17 +616,18 @@ function CollectionContent({ slug }) {
               </button>
             </div>
             {sortOptions.map((o) => {
-              const label = typeof o === 'string' ? o : o.label || o.value
+              const label = typeof o === 'string' ? o : (o.key ? t(o.key) : (o.label || o.value))
+              const val = typeof o === 'string' ? o : (o.value || o.label || o)
               return (
                 <button
-                  key={label}
+                  key={val}
                   onClick={() => {
-                    setSort(label)
+                    setSort(val)
                     setSortOpen(false)
                   }}
                   className="flex w-full items-center gap-3 px-5 py-3.5 text-left text-[13px]"
                 >
-                  <Check className={`h-4 w-4 ${sort === label ? 'opacity-100' : 'opacity-0'}`} />
+                  <Check className={`h-4 w-4 ${sort === val ? 'opacity-100' : 'opacity-0'}`} />
                   {label}
                 </button>
               )

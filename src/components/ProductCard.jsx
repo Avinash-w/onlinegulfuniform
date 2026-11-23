@@ -5,6 +5,7 @@ import { apiPost, getCustomerToken } from '../lib/api.js'
 import { useStore } from '../store/StoreContext.jsx'
 import { isCustomProduct } from '../store/selectors.js'
 import { ChevronLeft, ChevronRight, Heart, Percent, Star } from './icons'
+import { useLanguage } from '../context/LanguageContext'
 import Img from './Img'
 
 /** Distinct chip colors per badge label. */
@@ -83,9 +84,10 @@ function BadgeCycle({ badges }) {
  * the shots, with dot indicators underneath. Cards with a single image just
  * do the scale-up hover.
  */
-export default function ProductCard({ product, className = '', imageRatio = 'aspect-[3/4]' }) {
+export default function ProductCard({ product, className = '', imageRatio = 'aspect-[3/4]', variant = 'default' }) {
   const { lines = [], add, inc, dec, notify } = useCart()
   const { state, dispatch } = useStore()
+  const { t } = useLanguage()
   const navigate = useNavigate()
   const [idx, setIdx] = useState(0)
   const [hover, setHover] = useState(false)
@@ -98,6 +100,7 @@ export default function ProductCard({ product, className = '', imageRatio = 'asp
     handle, title, images, price, compareAt, discount, bestPrice,
     rating, reviews, colorCount, badges = [], soldOut, sizes = [],
   } = product
+  const collectionCard = variant === 'collection'
 
   const multi = images.length > 1
   const wished = state.wishlist.includes(handle)
@@ -142,7 +145,7 @@ export default function ProductCard({ product, className = '', imageRatio = 'asp
 
   return (
     <article
-      className={`group relative flex h-full flex-col ${className}`}
+      className={`group relative flex h-full flex-col ${collectionCard ? 'overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition-shadow duration-200 hover:shadow-lg' : ''} ${className}`}
       onMouseEnter={() => {
         setHover(true)
         setWantAll(true)
@@ -155,7 +158,7 @@ export default function ProductCard({ product, className = '', imageRatio = 'asp
     >
       <Link
         to={`/products/${handle}`}
-        className="relative block overflow-hidden rounded-lg bg-chalk"
+        className={`relative block overflow-hidden bg-chalk ${collectionCard ? 'rounded-none' : 'rounded-lg'}`}
         onMouseMove={onMove}
       >
         <div className={`relative w-full ${imageRatio}`}>
@@ -217,7 +220,7 @@ export default function ProductCard({ product, className = '', imageRatio = 'asp
         {soldOut && (
           <div className="absolute inset-0 grid place-items-center bg-white/55">
             <span className="border border-ink bg-white px-4 py-1.5 text-[10px] font-semibold uppercase tracking-wider2">
-              Sold out
+              {t('soldOut')}
             </span>
           </div>
         )}
@@ -230,15 +233,16 @@ export default function ProductCard({ product, className = '', imageRatio = 'asp
         disabled={wishBusy}
         aria-label={wished ? 'Remove from wishlist' : 'Save to wishlist'}
         aria-pressed={wished}
-        className={`absolute right-2 top-2.5 grid h-8 w-8 place-items-center rounded-full bg-white/90 shadow-card transition-colors disabled:opacity-50 ${
+        className={`absolute right-2 top-2.5 grid h-8 w-8 place-items-center rounded-full bg-white/95 shadow-card transition-colors disabled:opacity-50 ${
           wished ? 'text-sale' : 'text-ink hover:text-sale'
         }`}
       >
         <Heart filled={wished} className="h-4 w-4" />
       </button>
 
+      <div className={`flex flex-1 flex-col ${collectionCard ? 'p-3 sm:p-4' : ''}`}>
       {/* price row */}
-      <div className="mt-2.5 flex flex-wrap items-baseline gap-x-2 gap-y-0.5">
+      <div className={`flex flex-wrap items-baseline gap-x-2 gap-y-0.5 ${collectionCard ? '' : 'mt-2.5'}`}>
         <span className="text-[13px] font-semibold md:text-sm">{inr(price)}</span>
         {compareAt > price && (
           <>
@@ -255,11 +259,11 @@ export default function ProductCard({ product, className = '', imageRatio = 'asp
       {bestPrice && (
         <p className="mt-1 inline-flex w-fit items-center gap-1 bg-save/10 px-1.5 py-0.5 text-[10px] font-medium text-save md:text-[11px]">
           <Percent className="h-3 w-3" />
-          Best price {inr(bestPrice)}
+          {t('bestPrice')} {inr(bestPrice)}
         </p>
       )}
 
-      <h3 className="mt-1.5 line-clamp-2 min-h-[2.6em] text-[12px] leading-snug text-graphite md:text-[13px]">
+      <h3 className={`mt-2 line-clamp-2 min-h-[2.6em] leading-snug text-graphite ${collectionCard ? 'text-[13px] font-medium sm:text-sm' : 'text-[12px] md:text-[13px]'}`}>
         <Link to={`/products/${handle}`}>{title}</Link>
       </h3>
 
@@ -271,21 +275,21 @@ export default function ProductCard({ product, className = '', imageRatio = 'asp
             <span className="text-muted/80">({reviews})</span>
           </span>
         )}
-        {colorCount > 1 && <span className="text-[11px] text-muted">{colorCount} colors</span>}
+        {colorCount > 1 && <span className="text-[11px] text-muted">{colorCount} {t('colors')}</span>}
       </div>
 
       {/* mt-auto keeps the CTA pinned to the card bottom so rows stay aligned */}
-      <div className="mt-auto pt-2">
+      <div className={`mt-auto ${collectionCard ? 'pt-3' : 'pt-2'}`}>
         {soldOut ? (
           <button disabled className="btn-outline w-full cursor-not-allowed opacity-50 py-1.5 text-[10.5px] sm:py-2.5 sm:text-xs">
-            Sold out
+            {t('soldOut')}
           </button>
         ) : isCustomProduct(product) ? (
           <Link
             to={`/products/${handle}`}
             className="btn-outline flex w-full items-center justify-center gap-1.5 border-brand/40 bg-brand/5 py-1.5 text-[10.5px] text-brand transition-all hover:bg-brand hover:text-white sm:py-2.5 sm:text-xs"
           >
-            <span>✨</span> Customize
+            <span>✨</span> {t('customize')}
           </Link>
         ) : totalInCart > 0 ? (
           <div className="flex h-[32px] sm:h-[38px] w-full items-center justify-between rounded-lg border border-[#4849E8] bg-[#EEEDFC] p-0.5 sm:p-1 shadow-xs">
@@ -346,11 +350,12 @@ export default function ProductCard({ product, className = '', imageRatio = 'asp
                 ? setPicking(true)
                 : add({ handle, title, image: images[0], price, compareAt, size: 'One size' })
             }
-            className="btn-outline w-full py-1.5 text-[10.5px] sm:py-2.5 sm:text-xs"
+            className={`w-full rounded-lg py-2 text-[11px] font-semibold transition-colors sm:py-2.5 sm:text-xs ${collectionCard ? 'border border-[#1D4ED8] bg-[#1D4ED8] text-white hover:bg-[#1E40AF]' : 'btn-outline py-1.5 sm:py-2.5'}`}
           >
-            Add to cart
+            {t('addToCart')}
           </button>
         )}
+      </div>
       </div>
     </article>
   )

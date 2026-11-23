@@ -7,6 +7,10 @@ export default defineConfig({
     port: 5173,
     open: true,
     proxy: {
+      '/api': {
+        target: 'http://localhost/juneberry',
+        changeOrigin: true,
+      },
       '/juneberry/api': {
         target: 'http://localhost',
         changeOrigin: true,

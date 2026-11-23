@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Check, Copy, Tag } from './icons'
+import { inr } from '../context/CartContext'
 
 export default function CouponMarquee({ coupons = [] }) {
   const [copiedCode, setCopiedCode] = useState(null)
@@ -34,10 +35,10 @@ export default function CouponMarquee({ coupons = [] }) {
           {loopItems.map((c, i) => {
             const isCopied = copiedCode === c.code
             const discountLabel =
-              c.type === 'percent' ? `${c.value}% OFF` : `FLAT ₹${c.value} OFF`
+              c.type === 'percent' ? `${c.value}% OFF` : `FLAT ${inr(c.value)} OFF`
             const minCartLabel =
               c.minCart && Number(c.minCart) > 0
-                ? `Min Order ₹${Number(c.minCart).toLocaleString('en-IN')}`
+                ? `Min Order ${inr(Number(c.minCart))}`
                 : 'No Min Order'
 
             return (

@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import { useLanguage } from '../context/LanguageContext'
 import { useStore } from '../store/StoreContext.jsx'
 import { siteSettings, storefrontNav, userById } from '../store/selectors.js'
 import { ChevronDown, Close, User, Whatsapp } from './icons'
@@ -12,6 +13,7 @@ export default function MobileMenu({ open, onClose }) {
   const currentUser = userById(state, state.currentUserId)
   const isCustomer = currentUser && currentUser.role === 'Customer'
   const [expanded, setExpanded] = useState(null)
+  const { t } = useLanguage()
 
   return (
     <>
@@ -102,7 +104,7 @@ export default function MobileMenu({ open, onClose }) {
               ) : (
                 <User className="h-4 w-4 shrink-0" />
               )}
-              <span>{isCustomer ? 'MY ACCOUNT' : 'LOG IN'}</span>
+              <span>{isCustomer ? t('myAccount') : t('logIn')}</span>
             </Link>
             <a
               href={site.whatsapp || 'https://api.whatsapp.com/send/?phone=971501234567'}
@@ -110,13 +112,13 @@ export default function MobileMenu({ open, onClose }) {
               rel="noreferrer"
               className="flex items-center gap-2 py-2"
             >
-              <Whatsapp className="h-4 w-4 text-[#25D366]" /> WHATSAPP QUOTATION
+              <Whatsapp className="h-4 w-4 text-[#25D366]" /> {t('whatsappQuotation')}
             </a>
             <Link to="/track" onClick={onClose} className="block py-2">
-              TRACK ORDER
+              {t('trackOrder')}
             </Link>
             <Link to="/policies/contact-information" onClick={onClose} className="block py-2">
-              CONTACT US
+              {t('contactUs')}
             </Link>
           </div>
         </nav>
